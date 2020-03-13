@@ -27,6 +27,9 @@
                 <li class="{{ setActive('purchasing', 'active') }}">
                     <a href="/purchasing"> <i class="menu-icon fa fa-cart-plus"></i>Pembelian Barang </a>
                 </li>
+                <li class="{{ setActive('sale', 'active') }}">
+                    <a href="/sale"> <i class="menu-icon fa fa-cart-arrow-down"></i>Penjualan Barang </a>
+                </li>
                 @elseif(auth()->user()->role == 'eksekutif')
                 <li class="{{ setActive('report', 'active') }}">
                     <a href="/report"> <i class="menu-icon ti-book"></i>Laporan </a>

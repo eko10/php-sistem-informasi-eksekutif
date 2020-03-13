@@ -37,12 +37,18 @@ Route::group(['middleware' => ['auth','checkRole:admin']], function(){
 	// major
 	Route::resource('major', 'MajorController');
 	Route::post('major/update', 'MajorController@update')->name('major.update');
-	Route::get('major/search', 'MajorController@search')->name('major.search');
+	//Route::get('major/search', 'MajorController@search')->name('major.search');
+	Route::get('majorSearch/{id}', 'MajorController@search');
 	// purchasing
 	Route::resource('purchasing', 'PurchasingController');
 	Route::get('purchasing/create', 'PurchasingController@create')->name('purchasing.create');
 	Route::post('purchasing/update', 'PurchasingController@update')->name('purchasing.update');
 	Route::get('purchasing/search', 'PurchasingController@search')->name('purchasing.search');
+	// sale
+	Route::resource('sale', 'SaleController');
+	Route::get('sale/create', 'SaleController@create')->name('sale.create');
+	Route::post('sale/update', 'SaleController@update')->name('sale.update');
+	Route::get('sale/search', 'SaleController@search')->name('sale.search');
 });
 
 Route::group(['middleware' => ['auth','checkRole:eksekutif']], function(){

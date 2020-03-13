@@ -3,12 +3,25 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Alfa6661\AutoNumber\AutoNumberTrait;
 
 class Sale extends Model
 {
+    use AutoNumberTrait;
+
     protected $fillable = [
         'sales_number', 'customer_name', 'user_id', 'product_id', 'faculty_id', 'major_id', 'quantity', 'price', 'total_price'
     ];
+
+    public function getAutoNumberOptions()
+    {
+        return [
+            'sales_number' => [
+                'format' => 'SO-?', // Format kode yang akan digunakan.
+                'length' => 8 // Jumlah digit yang akan digunakan sebagai nomor urut
+            ]
+        ];
+    }
 
     public function user()
     {

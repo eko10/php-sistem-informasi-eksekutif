@@ -65,4 +65,13 @@ class MajorController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus.']);
     }
 
+    public function search($id)
+    {
+        // $majors = DB::table("majors")
+        //             ->where("faculty_id",$id)
+        //             ->pluck("name","id");
+        $majors = Major::where('faculty_id', $id)->pluck('name', 'id');
+        return json_encode($majors);
+    }
+
 }

@@ -17,7 +17,7 @@ class Supplier extends Model
     {
         return [
             'supplier_number' => [
-                'format' => 'SO-?', // Format kode yang akan digunakan.
+                'format' => 'SP-?', // Format kode yang akan digunakan.
                 'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
             ]
         ];

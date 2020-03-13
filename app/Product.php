@@ -25,4 +25,14 @@ class Product extends Model
     {
         return $this->belongsTo('App\Category');
     }
+
+    public function purchasing()
+    {
+        return $this->hasMany('App\Purchasing');
+    }
+
+    public function sale()
+    {
+        return $this->hasMany('App\Sale');
+    }
 }

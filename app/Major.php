@@ -27,4 +27,9 @@ class Major extends Model
     {
         return $this->belongsTo('App\Faculty');
     }
+
+    public function sale()
+    {
+        return $this->hasMany('App\Sale');
+    }
 }

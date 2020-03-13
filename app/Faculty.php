@@ -27,4 +27,9 @@ class Faculty extends Model
     {
         return $this->hasMany('App\Major');
     }
+
+    public function sale()
+    {
+        return $this->hasMany('App\Sale');
+    }
 }
