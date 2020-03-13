@@ -72,13 +72,15 @@
 
             $('#loginBtn').click(function (e) {
                 e.preventDefault();
-                $('#loginBtn').html('Proses..');
-                $('#loginBtn').prop('disabled', true);
                 $.ajax({
                     data: $('#loginForm').serialize(),
                     url: '/prosesLogin',
                     type: 'POST',
                     dataType: 'json',
+                    beforeSend: function(){
+                        $('#loginBtn').html('Proses..');
+                        $('#loginBtn').prop('disabled', true);
+                    },
                     success: function (data) {
                         var html = '';
                         if(data.errors) {
@@ -99,8 +101,8 @@
                         }
                         if(data.success) {
                             //html = '<div class="alert alert-success">' + data.success + '</div>';
-                            //$('#loginBtn').prop('disabled', true);
                             $('#loginBtn').html('Data ditemukan..');
+                            $('#loginBtn').prop('disabled', true);
                             location.reload(true);
                         }
                         $('#loginBtn').removeAttr('disabled');

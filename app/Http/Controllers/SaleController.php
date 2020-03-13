@@ -85,7 +85,7 @@ class SaleController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
-        Sale::updateOrCreate(['id' => $request->SALE_id], [
+        Sale::updateOrCreate(['id' => $request->sale_id], [
             'product_id' => $request->product_id,
             'customer_name' => $request->customer_name,
             'faculty_id' => $request->faculty_id,
@@ -103,9 +103,7 @@ class SaleController extends Controller
     public function edit($id)
     {
         $sale = Sale::with('product')->with('faculty')->with('major')->with('user')->find($id);
-        //Cookie::queue('update_purchasing', 'Data berhasil diubah.', 500);
         return view('sale.edit', compact('sale'));
-        //return response()->json($sale);
     }
 
     public function destroy($id)
