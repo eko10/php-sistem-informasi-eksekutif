@@ -10,6 +10,7 @@ use Auth;
 use Cookie;
 use DataTables;
 use Validator;
+use Illuminate\Support\Facades\Crypt;
 
 class SaleController extends Controller
 {
@@ -20,13 +21,13 @@ class SaleController extends Controller
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<a href="'.route('sale.edit', $row->id).'" class="edit btn btn-primary btn-sm editPurchasing">Edit</a>';
+                        $btn = '<a href="'.route('sale.edit', base64_encode($row->id)).'" class="edit btn btn-primary btn-sm editPurchasing">Edit</a>';
                         $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteSale">Delete</a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])
                     ->editColumn('product_id', function($data){
-                        return $data->product->name;
+                        return $data->product->name .' - '. formatRupiah($data->product->price);
                     })
                     ->editColumn('faculty_id', function($data){
                         return $data->customer_name .' ('. $data->faculty->name .' - '. $data->major->name . ' )';
@@ -102,6 +103,7 @@ class SaleController extends Controller
 
     public function edit($id)
     {
+        $id = base64_decode($id);
         $sale = Sale::with('product')->with('faculty')->with('major')->with('user')->find($id);
         return view('sale.edit', compact('sale'));
     }

@@ -19,13 +19,13 @@ class PurchasingController extends Controller
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<a href="'.route('purchasing.edit', $row->id).'" class="edit btn btn-primary btn-sm editPurchasing">Edit</a>';
+                        $btn = '<a href="'.route('purchasing.edit', base64_encode($row->id)).'" class="edit btn btn-primary btn-sm editPurchasing">Edit</a>';
                         $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deletePurchasing">Delete</a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])
                     ->editColumn('product_id', function($data){
-                        return $data->product->name;
+                        return $data->product->name .' - '. formatRupiah($data->product->price);
                     })
                     ->editColumn('supplier_id', function($data){
                         return $data->supplier->supplier_name;
@@ -93,6 +93,7 @@ class PurchasingController extends Controller
 
     public function edit($id)
     {
+        $id = base64_decode($id);
         $purchasing = Purchasing::with('product')->with('supplier')->with('user')->find($id);
         //Cookie::queue('update_purchasing', 'Data berhasil diubah.', 500);
         return view('purchasing.edit', compact('purchasing'));

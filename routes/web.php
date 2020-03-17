@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth','checkRole:admin']], function(){
 	Route::resource('product', 'ProductController');
 	Route::post('product/update', 'ProductController@update')->name('product.update');
 	Route::get('productSearch', 'ProductController@search');
+	Route::get('productSearchByCode', 'ProductController@searchByCode');
 	Route::post('getProductById', 'ProductController@getProductById');
 	// supplier
 	Route::resource('supplier', 'SupplierController');

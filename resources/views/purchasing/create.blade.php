@@ -39,13 +39,14 @@
                             <input type="hidden" name="product_id" id="product_id">
                             <div class="row">
                                 <div class="col md-2">
-                                    <label for="code" class="form-control-label">Kode Barang</label>
+                                    <label for="product_code" class="form-control-label">Kode Barang</label>
                                     <div class="input-group">
-                                        <input name="code" id="code" class="form-control" placeholder="Klik icon search.." autocomplete="off" autofocus>
+                                        <input name="product_code" id="product_code" class="form-control" placeholder="Ketik kode atau nama barang / klik icon search" autocomplete="off" autofocus>
                                         <div class="input-group-addon" id="loadProduct" style="background-color: #337ab7; width: 50px">
                                             <span class="fa fa-search fa-lg" style="color: #ffffff"></span>
                                         </div>
-                                    </div>    
+                                    </div>
+                                    <div id="product_list"></div> 
                                 </div>
                                 <div class="col md-6">
                                     <div class="form-group">
@@ -143,6 +144,37 @@
             },
         });
 
+        $('#product_code').on('keyup',function() {
+            var query = $(this).val();
+            $.ajax({
+                url:"/productSearchByCode",
+                type:"GET",
+                data:{'product':query},
+                success:function (data) {
+                    $('#product_list').html(data);
+                }
+            });
+        });
+
+        $(document).on('click', 'li', function(){
+            let value = $(this).text();
+            let product_id = $(this).data('id');
+            let code = $(this).data('code');
+            let name = $(this).data('name');
+            let price = $(this).data('price');
+            let stock = $(this).data('stock');
+            let quantity = $('#quantity').val(1);
+            let total = price * 1;
+            $('#product_id').val(product_id);
+            $('#product_code').val(code);
+            $('#namaBarang').val(name);
+            $('#hargaBarang').val(price);
+            $('#stokBarang').val(stock);
+            $("#totalHargaBarang").val(total);
+            $('#quantity').focus();
+            $('#product_list').html("");
+        });
+
         var table = $('.data-table').DataTable({
             processing: true,
             serverSide: true,
@@ -158,15 +190,15 @@
         });
 
         $('body').on('click', '.selectProduct', function() {
-            var product_id = $(this).data('id');
-            var code = $(this).data('code');
-            var name = $(this).data('name');
-            var price = $(this).data('price');
-            var stock = $(this).data('stock');
-            var quantity = $('#quantity').val(1);
-            var total = price * 1;
+            let product_id = $(this).data('id');
+            let code = $(this).data('code');
+            let name = $(this).data('name');
+            let price = $(this).data('price');
+            let stock = $(this).data('stock');
+            let quantity = $('#quantity').val(1);
+            let total = price * 1;
             $('#product_id').val(product_id);
-            $('#code').val(code);
+            $('#product_code').val(code);
             $('#namaBarang').val(name);
             $('#hargaBarang').val(price);
             $('#stokBarang').val(stock);
@@ -182,18 +214,16 @@
         });
 
         $("#quantity").keyup(function() {
-            var quantity  = $("#quantity").val();
-            var harga = $("#hargaBarang").val();
-
-            var total = parseInt(quantity) * parseInt(harga);
+            let quantity  = $("#quantity").val();
+            let harga = $("#hargaBarang").val();
+            let total = parseInt(quantity) * parseInt(harga);
             $("#totalHargaBarang").val(total);
         });
 
         $("#quantity").change(function() {
-            var quantity  = $("#quantity").val();
-            var harga = $("#hargaBarang").val();
-
-            var total = parseInt(quantity) * parseInt(harga);
+            let quantity  = $("#quantity").val();
+            let harga = $("#hargaBarang").val();
+            let total = parseInt(quantity) * parseInt(harga);
             $("#totalHargaBarang").val(total);
         });
         
@@ -218,6 +248,10 @@
                         //html = '<div class="alert alert-success">' + data.success + '</div>';
                         //$('#form_result_table').html(html);
                         window.location='/purchasing';
+                        // let options = {
+                        //     "showDuration": "8000",
+                        // };
+                        //setTimeout(toastr.info('Data berhasil disimpan.'), 80000);
                         $('#purchasingForm').trigger("reset");
                         $("#supplier").val('').trigger("change");
                         $('#saveBtn').html('Simpan');

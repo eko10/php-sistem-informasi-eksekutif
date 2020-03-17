@@ -102,15 +102,34 @@
                         if(data.success) {
                             //html = '<div class="alert alert-success">' + data.success + '</div>';
                             $('#loginBtn').html('Data ditemukan..');
-                            $('#loginBtn').prop('disabled', true);
+                            //$('#loginBtn').prop('disabled', true);
                             location.reload(true);
                         }
                         $('#loginBtn').removeAttr('disabled');
                         $('#form_result_table').html(html);
                     },
-                    error: function (data) {
-                        console.log('Error:', data);
+                    // error: function(msg) {
+                    //     //var errorMessage = xhr.status + ': ' + xhr.statusText
+                    //     alert('Error - ' + msg.responseText['message']);
+                    //     //var err = eval("(" + jqXHR.responseText + ")");
+                    //     console.log('Error:', msg['message']);
+                    //     //html = '<div class="alert alert-danger">' + err.Message + '</div>';
+                    //     $('#loginBtn').removeAttr('disabled');
+                    //     $('#loginBtn').html('Login');
+                    //     $('#form_result_table').html(html);
+                    // }
+                    error: function(xhr, status, error) {
+                        let json = JSON.parse(xhr.responseText);
+                        let message = json.message;
+                        //let message = res.split(".");
+                        //console.log('xhr: ' + xhr);
+                        //console.log(json.message);
+                        //console.log('status: ' + status);
+                        //console.log('error: ' + error);
+                        html = '<div class="alert alert-danger">' + message + '.</div>';
+                        $('#loginBtn').removeAttr('disabled');
                         $('#loginBtn').html('Login');
+                        $('#form_result_table').html(html);
                     }
                 });
             });

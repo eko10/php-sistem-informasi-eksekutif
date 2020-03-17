@@ -26,10 +26,11 @@
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.9.0/dist/fullcalendar.min.css" rel="stylesheet" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-   <style>
-    #weatherWidget .currentDesc {
-        color: #ffffff!important;
-    }
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    <style>
+        #weatherWidget .currentDesc {
+            color: #ffffff!important;
+        }
         .traffic-chart {
             min-height: 335px;
         }
@@ -136,6 +137,7 @@
     <script src="{{asset('admin/assets/js/lib/data-table/buttons.print.min.js')}}"></script>
     <script src="{{asset('admin/assets/js/lib/data-table/buttons.colVis.min.js')}}"></script>
     <script src="{{asset('admin/assets/js/init/datatables-init.js')}}"></script>
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
 
     @yield('javascript')
 

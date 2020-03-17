@@ -22,7 +22,7 @@ class DashboardController extends Controller
         // ];
         // $chart = new LaravelChart($chart_options);
 
-        // $response_year = array();
+        $response_year = array();
         // $r_year = array();
         // $response_year_to_month = array();
         // $response_month_to_date = array();
@@ -37,7 +37,7 @@ class DashboardController extends Controller
         //     array_push($r_year, $d_year);
         // }
         
-        // $product_year = DB::table('products')
+        // $total_sales = DB::table('sales')
         //              ->select(DB::raw('count(*) as total, id, name, stock, YEAR(created_at) as monthyear'))
         //              ->groupBy('monthyear')
         //              ->get();

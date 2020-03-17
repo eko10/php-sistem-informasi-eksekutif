@@ -16,8 +16,8 @@ class ProductController extends Controller
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
-                        $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+                        $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip" data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -74,6 +74,26 @@ class ProductController extends Controller
     {
         $product = Product::where('name', 'LIKE', '%'.$request->input('term', '').'%')->get(['id', 'name as text']);
         return ['results' => $product];
+    }
+
+    public function searchByCode(Request $request){
+        if($request->ajax()) {
+            $data = Product::where('product_number', 'LIKE', $request->product.'%')
+                            ->orWhere('name', 'LIKE', $request->product.'%')
+                            ->get();
+            $output = '';
+            if (count($data)>0) {
+                $output = '<ul class="list-group" style="display: block; position: relative; z-index: 1">';
+                foreach ($data as $row){
+                    $output .= '<li class="list-group-item" data-id="'.$row->id.'" data-code="'.$row->product_number.'" data-name="'.$row->name.'" data-price="'.$row->price.'" data-stock="'.$row->stock.'">'.$row->product_number.' - '.$row->name.'</li>';
+                }
+                $output .= '</ul>';
+            }
+            else {
+                $output .= '<li class="list-group-item">'.'No results'.'</li>';
+            }
+            return $output;
+        }
     }
 
 }

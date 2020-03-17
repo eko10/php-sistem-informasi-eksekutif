@@ -229,8 +229,19 @@
                         }
                         $('#form_result_table').html(html);
                     },
-                    error: function(data) {
-                        console.log('Error:', data);
+                    // error: function(data) {
+                    //     console.log('Error:', data);
+                    // }
+                    error: function(xhr, status, error) {
+                        let json = JSON.parse(xhr.responseText);
+                        let message = json.message;
+                        //console.log(xhr);
+                        //console.log(status);
+                        //console.log(error);
+                        html = '<div class="alert alert-danger">' + message + '</div>';
+                        $('#ok_button').text('Yakin');
+                        $('#confirmModal').modal('hide');
+                        $('#form_result_table').html(html);
                     }
                 });
             });
