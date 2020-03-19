@@ -207,6 +207,7 @@
         $('body').on('click', '.deleteMajor', function () {
             var major_id = $(this).data('id');
             $('#confirmModal').modal('show');
+            $('#form_result_table').html('');
 
             $('#ok_button').click(function() {
                 $.ajax({
@@ -234,8 +235,23 @@
                         }
                         $('#form_result_table').html(html);
                     },
-                    error: function(data) {
-                        console.log('Error:', data);
+                    error: function(xhr, status, error) {
+                        let json = JSON.parse(xhr.responseText);
+                        let message = json.message;
+                        // let search = 'Integrity constraint violation: 1451';
+                        // if(message.includes(search)){
+                        //     html = '<div class="alert alert-danger"><b>Error</b>, data yang anda hapus masih terkait dengan tabel lain.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                        //     $('#form_result_table').html(html);
+                        // }else{
+                        //     html = '<div class="alert alert-danger">' + message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                        //     $('#form_result_table').html(html);
+                        // }
+                        console.log(message);
+                        html = '<div class="alert alert-danger"><b>Error</b>, data yang anda hapus masih terkait dengan tabel lain.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                        $('#form_result_table').html(html);
+                        $('#ok_button').removeAttr('disabled');
+                        $('#ok_button').text('Yakin');
+                        $('#confirmModal').modal('hide');
                     }
                 });
             });

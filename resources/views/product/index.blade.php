@@ -46,6 +46,7 @@
                                     <th width="20%">Kategori</th>
                                     <th width="15%">Harga</th>
                                     <th width="10%">Stok</th>
+                                    <th width="10%">Gambar</th>
                                     <th width="10%">Aksi</th>
                                 </tr>
                             </thead>
@@ -60,7 +61,7 @@
 <div class="modal fade" id="ajaxModel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="productForm" name="productForm" class="form-horizontal">
+            <form id="productForm" name="productForm" class="form-horizontal" enctype="multipart/form-data">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h3 class="modal-title" id="modelHeading"></h3>
@@ -84,6 +85,13 @@
                         <div class="form-group">
                             <label for="stock" class=" form-control-label">Stok</label>
                             <input type="number" class="form-control" id="stock" name="stock" placeholder="Stok Barang">
+                        </div>
+                        <div class="form-group" id="form_style">
+                            <div id="image_view"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="image_file" class="form-control-label" id="form_title"></label>
+                            <input type="file" class="form-control" id="image_file" name="image_file">
                         </div>
                     </div>
                 </div>
@@ -145,7 +153,15 @@
                 {data: 'category_id', name: 'categories.name'},
                 {data: 'price', name: 'price'},
                 {data: 'stock', name: 'stock'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
+                {
+                    'data': 'image_file',
+                    'name': 'image_file',
+                    'render': function (data, type, full, meta) {
+                        data = (data == '') ? 'no_image.png' : data;
+                        return "<img src=\"{{ asset('images/product/') }}/" + data + "\" height=\"50\"/>";
+                    },
+                },
+                {data: 'action', name: 'action', orderable: false, searchable: false, exportable: true, printable: true},
             ]
         });
         
@@ -155,6 +171,8 @@
             $("#saveBtn").addClass("btn-success");
             $('#product_id').val('');
             $('#productForm').trigger("reset");
+            $('#form_style').css('display', 'none');
+            $('#form_title').html("Gambar Barang");
             $("#category").val('').trigger("change");
             $('#modelHeading').html("Tambah Data");
             $('#ajaxModel').modal('show');
@@ -172,6 +190,7 @@
                 $("#saveBtn").removeClass("btn-success");
                 $("#saveBtn").addClass("btn-primary");
                 $('#ajaxModel').modal('show');
+                $('#form_title').html("Ubah Gambar");
                 $('#product_id').val(data.id);
                 $('#product_number').val(data.product_number);
                 $('#name').val(data.name);
@@ -180,16 +199,22 @@
                 });
                 $('#price').val(data.price);
                 $('#stock').val(data.stock);
+                let image = (data.image_file == '') ? 'no_image.png' : data.image_file;
+                $("#form_style").css("display", "block");
+                $('#image_view').html('<img src="{{ asset("images/product") }}/'+ image +'" width="100" height="100" />')
             });
         });
         
         $('#saveBtn').click(function (e) {
             e.preventDefault();
             $(this).html('Proses..');
+            let formData = new FormData($('#productForm')[0]);
             $.ajax({
-                data: $('#productForm').serialize(),
                 url: "{{ route('product.store') }}",
                 type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
                 dataType: 'json',
                 success: function (data) {
                     var html = '';
@@ -245,12 +270,27 @@
                                 $('#ok_button').text('Yakin');
                                 $('#confirmModal').modal('hide');
                                 table.draw();
-                            }, 300);
+                            }, 500);
                         }
                         $('#form_result_table').html(html);
                     },
-                    error: function(data) {
-                        console.log('Error:', data);
+                    error: function(xhr, status, error) {
+                        let json = JSON.parse(xhr.responseText);
+                        let message = json.message;
+                        // let search = 'Integrity constraint violation: 1451';
+                        // if(message.includes(search)){
+                        //     html = '<div class="alert alert-danger"><b>Error</b>, data yang anda hapus masih terkait dengan tabel lain.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                        //     $('#form_result_table').html(html);
+                        // }else{
+                        //     html = '<div class="alert alert-danger">' + message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                        //     $('#form_result_table').html(html);
+                        // }
+                        console.log(message);
+                        html = '<div class="alert alert-danger"><b>Error</b>, data yang anda hapus masih terkait dengan tabel lain.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                        $('#form_result_table').html(html);
+                        $('#ok_button').removeAttr('disabled');
+                        $('#ok_button').text('Yakin');
+                        $('#confirmModal').modal('hide');
                     }
                 });
             });

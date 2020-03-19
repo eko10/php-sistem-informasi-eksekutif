@@ -9,14 +9,15 @@ class Product extends Model
 {
     use AutoNumberTrait;
 
-    protected $fillable = ['product_number', 'name', 'category_id', 'price', 'stock'];
+    protected $fillable = ['product_number', 'name', 'category_id', 'price', 'stock', 'image_file'];
 
+    // Accesor
     public function getAutoNumberOptions()
     {
         return [
             'product_number' => [
-                'format' => 'PR-?', // Format kode yang akan digunakan.
-                'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
+                'format' => 'PR-?',
+                'length' => 5
             ]
         ];
     }

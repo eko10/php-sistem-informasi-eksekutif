@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use DataTables;
 use Validator;
+use File;
 
 class ProductController extends Controller
 {
@@ -27,6 +28,7 @@ class ProductController extends Controller
                     ->editColumn('price', function($data){
                         return formatRupiah($data->price);
                     })
+                    
                     ->make(true);
         }
       
@@ -40,12 +42,17 @@ class ProductController extends Controller
             'name'        => 'required',
             'category_id' => 'required',
             'price'       => 'required',
-            'stock'       => 'required'
+            'stock'       => 'required',
+            'image_file'  => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ], [
             'name.required' => 'Nama Barang tidak boleh kosong !',
             'category_id.required' => 'Kategori Barang tidak boleh kosong !',
             'price.required' => 'Harga tidak boleh kosong !',
-            'stock.required' => 'Stok tidak boleh kosong !'
+            'stock.required' => 'Stok tidak boleh kosong !',
+            //'image_file.required' => 'Gambar tidak boleh kosong !',
+            'image_file.image' => 'File gambar harus berupa gambar !',
+            'image_file.mimes' => 'Ekstensi gambar hanya boleh .jpeg, .png, .jpg, .gif, .svg !',
+            'image_file.max' => 'Ukuran file gambar maksimal 2 mb !',
         ]);
 
         if($error->fails())
@@ -53,7 +60,43 @@ class ProductController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
-        Product::updateOrCreate(['id' => $request->product_id], ['name' => $request->name, 'category_id' => $request->category_id, 'price' => $request->price, 'stock' => $request->stock]);
+        if($request->hasFile('image_file')){
+
+            if(!empty($request->product_id)){
+                $product = Product::where('id', $request->product_id)->first();
+                if($product->image_file != ''){
+                    File::delete('images/product/'.$product->image_file);
+                }
+            }
+
+            $imageUpload = $request->file('image_file');
+            $imageName = rand() . '.' . $imageUpload->getClientOriginalExtension();
+            $imagePath = public_path('/images/product/');
+            $imageUpload->move($imagePath, $imageName);
+
+            $product = Product::updateOrCreate(
+                ['id' => $request->product_id],
+                [
+                    'name' => $request->name,
+                    'category_id' => $request->category_id,
+                    'price' => $request->price,
+                    'stock' => $request->stock,
+                    'image_file' => $imageName,
+                ]
+            );
+        } else {
+
+            $product = Product::updateOrCreate(
+                ['id' => $request->product_id],
+                [
+                    'name' => $request->name,
+                    'category_id' => $request->category_id,
+                    'price' => $request->price,
+                    'stock' => $request->stock,
+                ]
+            );
+
+        }
    
         return response()->json(['success' => 'Data berhasil disimpan.']);
     }
@@ -66,7 +109,15 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        Product::find($id)->delete();
+        // hapus file
+        $product = Product::where('id', $id)->first();
+        if($product->image_file != ''){
+            File::delete('images/product/'.$product->image_file);
+        }
+ 
+		// hapus data
+        Product::where('id', $id)->delete();
+        
         return response()->json(['success' => 'Data berhasil dihapus.']);
     }
 

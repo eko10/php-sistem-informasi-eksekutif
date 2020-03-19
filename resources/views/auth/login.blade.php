@@ -77,11 +77,11 @@
                     url: '/prosesLogin',
                     type: 'POST',
                     dataType: 'json',
-                    beforeSend: function(){
+                    beforeSend: function() {
                         $('#loginBtn').html('Proses..');
                         $('#loginBtn').prop('disabled', true);
                     },
-                    success: function (data) {
+                    success: function(data) {
                         var html = '';
                         if(data.errors) {
                             html = '<div class="alert alert-danger">';
@@ -108,24 +108,9 @@
                         $('#loginBtn').removeAttr('disabled');
                         $('#form_result_table').html(html);
                     },
-                    // error: function(msg) {
-                    //     //var errorMessage = xhr.status + ': ' + xhr.statusText
-                    //     alert('Error - ' + msg.responseText['message']);
-                    //     //var err = eval("(" + jqXHR.responseText + ")");
-                    //     console.log('Error:', msg['message']);
-                    //     //html = '<div class="alert alert-danger">' + err.Message + '</div>';
-                    //     $('#loginBtn').removeAttr('disabled');
-                    //     $('#loginBtn').html('Login');
-                    //     $('#form_result_table').html(html);
-                    // }
                     error: function(xhr, status, error) {
                         let json = JSON.parse(xhr.responseText);
                         let message = json.message;
-                        //let message = res.split(".");
-                        //console.log('xhr: ' + xhr);
-                        //console.log(json.message);
-                        //console.log('status: ' + status);
-                        //console.log('error: ' + error);
                         html = '<div class="alert alert-danger">' + message + '.</div>';
                         $('#loginBtn').removeAttr('disabled');
                         $('#loginBtn').html('Login');
