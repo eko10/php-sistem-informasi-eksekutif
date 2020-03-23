@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth','checkRole:admin']], function(){
 	// purchasing
 	Route::resource('purchasing', 'PurchasingController');
 	Route::get('purchasing/create', 'PurchasingController@create')->name('purchasing.create');
+	//Route::post('purchasing/insert', 'PurchasingController@insert')->name('purchasing.insert');
 	Route::post('purchasing/update', 'PurchasingController@update')->name('purchasing.update');
 	Route::get('purchasing/search', 'PurchasingController@search')->name('purchasing.search');
 	// sale
@@ -60,4 +61,6 @@ Route::group(['middleware' => ['auth','checkRole:eksekutif']], function(){
 Route::group(['middleware' => ['auth','checkRole:eksekutif,admin']], function(){
 	// dashboard
 	Route::get('/dashboard', 'DashboardController@index');
+	Route::get('report/sumPurchasingByYear', 'ReportController@sumPurchasingByYear')->name('report.sumPurchasingByYear');
+	Route::get('report/sumPurchasingByMonth', 'ReportController@sumPurchasingByMonth')->name('report.sumPurchasingByMonth');
 });

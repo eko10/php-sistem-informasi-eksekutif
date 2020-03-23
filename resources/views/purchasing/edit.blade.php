@@ -211,6 +211,7 @@
 
         $('#loadProduct').click(function () {
             $('#modelHeading').html("Data Barang");
+            $('#product_list').html('');
             $('#productModal').modal('show');
         });
 

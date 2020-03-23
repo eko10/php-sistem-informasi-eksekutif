@@ -32,10 +32,6 @@
                     $msg_save = Cookie::get('save_purchasing');
                     $msg_save = ($msg_save != '') ? $msg_save : '';
                     Cookie::queue(Cookie::forget('save_purchasing'));
-
-                    // $msg_update = Cookie::get('update_purchasing');
-                    // $msg_update = ($msg_update != '') ? $msg_update : '';
-                    // Cookie::queue(Cookie::forget('update_purchasing'));
                 @endphp
                 <input type="hidden" value="{{ $msg_save }}" id="msg_save">
                 {{-- <input type="hidden" value="{{ $msg_update }}" id="msg_update"> --}}

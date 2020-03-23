@@ -60,8 +60,57 @@ class PurchasingController extends Controller
         return view('purchasing.create');
     }
 
+    public function insert(Request $request)
+    {
+
+        //dd($request);
+        
+        // $error = Validator::make($request->all(), [
+        //     'product_id'  => 'required',
+        //     'supplier_id' => 'required',
+        //     'quantity'    => 'required'
+        // ], [
+        //     'product_id.required' => 'Kode Barang tidak boleh kosong !',
+        //     'supplier_id.required' => 'Supplier tidak boleh kosong !',
+        //     'quantity.required' => 'Quantity tidak boleh kosong !'
+        // ]);
+
+        $this->validate($request, [
+            'product_id'  => 'required',
+            'supplier_id' => 'required',
+            'quantity'    => 'required'
+        ], [
+            'product_id.required' => 'Kode Barang tidak boleh kosong !',
+            'supplier_id.required' => 'Supplier tidak boleh kosong !',
+            'quantity.required' => 'Quantity tidak boleh kosong !'
+        ]);
+
+        // if($error->fails())
+        // {
+        //     return response()->json(['errors' => $error->errors()->all()]);
+        // }
+
+        //Product::where('id', $product->id)->update(['stock' => $request->product_id]);
+        $request->request->add(['user_id' => Auth::user()->id]);
+        Purchasing::create($request->all());
+
+        $product = Product::find($request->product_id);
+        $stock = $product->stock;
+        $stock_update = $stock + $request->quantity;
+
+        $flight = Product::find($product->id);
+        $flight->stock = $stock_update;
+        $flight->save();
+   
+        Cookie::queue('save_purchasing', 'Data berhasil disimpan.', 500);
+        return redirect('/purchasing')->with('sukses', 'Data berhasil dinput');
+        //return response()->json(['success' => 'Data berhasil disimpan.']);
+    }
+
     public function store(Request $request)
     {
+
+        //dd($request);
         
         $error = Validator::make($request->all(), [
             'product_id'  => 'required',
@@ -78,6 +127,8 @@ class PurchasingController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
+        //Product::where('id', $product->id)->update(['stock' => $request->product_id]);
+
         Purchasing::updateOrCreate(['id' => $request->purchasing_id], [
             'product_id' => $request->product_id,
             'supplier_id' => $request->supplier_id,
@@ -86,6 +137,12 @@ class PurchasingController extends Controller
             'total_price' => $request->total_price,
             'user_id' => Auth::user()->id,
         ]);
+
+        $product = Product::find($request->product_id);
+        $stock_now = $product->stock;
+        $stock_update = $stock_now + $request->quantity;
+        $product->stock = $stock_update;
+        $product->save();
    
         Cookie::queue('save_purchasing', 'Data berhasil disimpan.', 500);
         return response()->json(['success' => 'Data berhasil disimpan.']);
@@ -105,4 +162,5 @@ class PurchasingController extends Controller
         Purchasing::find($id)->delete();
         return response()->json(['success' => 'Data berhasil dihapus.']);
     }
+    
 }

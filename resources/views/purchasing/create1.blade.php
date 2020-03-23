@@ -35,7 +35,8 @@
                     </div>
                     <div class="card-body">
 
-                        <form id="purchasingForm" name="purchasingForm">
+                        <form id="purchasingForm" name="purchasingForm" method="POST" action="{{ route('purchasing.insert') }}">
+                            {{ csrf_field() }}
                             <input type="text" name="product_id" id="product_id">
                             <div class="row">
                                 <div class="col md-2">
@@ -228,38 +229,45 @@
             $("#totalHargaBarang").val(total);
         });
         
-        $('#saveBtn').click(function (e) {
-            e.preventDefault();
-            $(this).html('Proses..');
-            $.ajax({
-                data: $('#purchasingForm').serialize(),
-                url: "{{ route('purchasing.store') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function (data) {
-                    var html = '';
-                    if(data.errors) {
-                        html = '<div class="alert alert-danger">';
-                        for(var count = 0; count < data.errors.length; count++) {
-                            html += data.errors[count] + '<br>';
-                        }
-                        html += '</div>';
-                    }
-                    if(data.success) {
-                        window.location='/purchasing';
-                        $('#purchasingForm').trigger("reset");
-                        $("#supplier").val('').trigger("change");
-                        $('#saveBtn').html('Simpan');
-                    }
-                    $('#form_result_table').html(html);
-                    $('#saveBtn').html('Simpan');
-                },
-                error: function (data) {
-                    console.log('Error:', data);
-                    $('#saveBtn').html('Simpan');
-                }
-            });
-        });
+        // $('#saveBtn').click(function (e) {
+        //     e.preventDefault();
+        //     $(this).html('Proses..');
+        //     $.ajax({
+        //         data: $('#purchasingForm').serialize(),
+        //         url: "{{ route('purchasing.store') }}",
+        //         type: "POST",
+        //         dataType: 'json',
+        //         success: function (data) {
+        //             var html = '';
+        //             if(data.errors) {
+        //                 html = '<div class="alert alert-danger">';
+        //                 for(var count = 0; count < data.errors.length; count++) {
+        //                     html += data.errors[count] + '<br>';
+        //                 }
+        //                 html += '</div>';
+        //             }
+        //             if(data.success) {
+        //                 //html = '<div class="alert alert-success">' + data.success + '</div>';
+        //                 //$('#form_result_table').html(html);
+        //                 window.location='/purchasing';
+        //                 // let options = {
+        //                 //     "showDuration": "8000",
+        //                 // };
+        //                 //setTimeout(toastr.info('Data berhasil disimpan.'), 80000);
+        //                 $('#purchasingForm').trigger("reset");
+        //                 $("#supplier").val('').trigger("change");
+        //                 $('#saveBtn').html('Simpan');
+        //                 // location.reload(true);
+        //             }
+        //             $('#form_result_table').html(html);
+        //             $('#saveBtn').html('Simpan');
+        //         },
+        //         error: function (data) {
+        //             console.log('Error:', data);
+        //             $('#saveBtn').html('Simpan');
+        //         }
+        //     });
+        // });
         
     });
 

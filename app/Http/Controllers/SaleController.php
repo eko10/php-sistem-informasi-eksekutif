@@ -96,6 +96,41 @@ class SaleController extends Controller
             'total_price' => $request->total_price,
             'user_id' => Auth::user()->id,
         ]);
+
+        $product = Product::find($request->product_id);
+        $stock_now = $product->stock;
+        $stock_update = $stock_now + $request->quantity;
+        $product->stock = $stock_update;
+        $product->save();
+
+        // if(empty($request->sale_id)){
+        //     $product = Product::find($request->product_id);
+        //     $stock_now = $product->stock;
+        //     $stock_update = $stock_now - $request->quantity;
+        //     $product->stock = $stock_update;
+        //     $product->save();
+        // }else{
+        //     $sale = Sale::find($request->sale_id);
+        //     if($sale->quantity >= $request->quantity){
+        //         $product = Product::find($request->product_id);
+        //         $stock_now = $product->stock;
+        //         $stock_update = $stock_now + $request->quantity;
+        //         $product->stock = $stock_update;
+        //         $product->save();
+        //     }else if($sale->quantity <= $request->quantity){
+        //         $product = Product::find($request->product_id);
+        //         $stock_now = $product->stock;
+        //         $stock_update = $stock_now - $request->quantity;
+        //         $product->stock = $stock_update;
+        //         $product->save();
+        //     }else if($sale->quantity == $request->quantity){
+        //         $product = Product::find($request->product_id);
+        //         $stock_now = $product->stock;
+        //         $stock_update = $stock_now;
+        //         $product->stock = $stock_update;
+        //         $product->save();
+        //     }
+        // }
    
         Cookie::queue('save_sale', 'Data berhasil disimpan.', 500);
         return response()->json(['success' => 'Data berhasil disimpan.']);

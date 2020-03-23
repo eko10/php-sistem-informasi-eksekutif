@@ -128,6 +128,7 @@
             $('#categoryForm').trigger("reset");
             $('#modelHeading').html("Tambah Data");
             $('#ajaxModel').modal('show');
+            //$('#ajaxModel #categoryForm #name').focus();
             $('#form_result_table').html('');
             $('#form_result').html('');
         });

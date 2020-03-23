@@ -188,6 +188,8 @@
             }
         });
 
+        //console.log($('#product_code').is(':focus'));
+
         $('#product_code').on('keyup',function() {
             let query = $(this).val();
             $.ajax({
@@ -216,7 +218,7 @@
             $('#stokBarang').val(stock);
             $("#totalHargaBarang").val(total);
             $('#quantity').focus();
-            $('#product_list').html("");
+            $('#product_list').html('');
         });
 
         var table = $('.data-table').DataTable({
@@ -253,6 +255,7 @@
 
         $('#loadProduct').click(function () {
             $('#modelHeading').html("Data Barang");
+            $('#product_list').html('');
             $('#productModal').modal('show');
         });
 

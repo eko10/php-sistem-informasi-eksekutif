@@ -2,172 +2,126 @@
 
 @section('content')
     <div class="content">
+        <!-- Animated -->
         <div class="animated fadeIn">
+            <!--  Traffic  -->
             <div class="row">
-                <div class="col-xs-6 col-sm-6">
+                <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header">
-                            <strong>Masked Input</strong> <small> Small Text Mask</small>
-                        </div>
-                        <div class="card-body card-block">
-                            <div class="form-group">
-                                <label class=" form-control-label">Date input</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                                    <input class="form-control">
-                                </div>
-                                <small class="form-text text-muted">ex. 99/99/9999</small>
-                            </div>
-                            <div class="form-group">
-                                <label class=" form-control-label">Phone input</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                                    <input class="form-control">
-                                </div>
-                                <small class="form-text text-muted">ex. (999) 999-9999</small>
-                            </div>
-                            <div class="form-group">
-                                <label class=" form-control-label">Taxpayer Identification Numbers</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-usd"></i></div>
-                                    <input class="form-control">
-                                </div>
-                                <small class="form-text text-muted">ex. 99-9999999</small>
-                            </div>
-                            <div class="form-group">
-                                <label class=" form-control-label">Social Security Number</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-male"></i></div>
-                                    <input class="form-control">
-                                </div>
-                                <small class="form-text text-muted">ex. 999-99-9999</small>
-                            </div>
-                            <div class="form-group">
-                                <label class=" form-control-label">Eye Script</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-asterisk"></i></div>
-                                    <input class="form-control">
-                                </div>
-                                <small class="form-text text-muted">ex. ~9.99 ~9.99 999</small>
-                            </div>
-                            <div class="form-group">
-                                <label class=" form-control-label">Credit Card Number</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-credit-card"></i></div>
-                                    <input class="form-control">
-                                </div>
-                                <small class="form-text text-muted">ex. 9999 9999 9999 9999</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xs-6 col-sm-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <strong class="card-title">Standard Select</strong>
-                        </div>
                         <div class="card-body">
-
-                        <select data-placeholder="Choose a Country..." class="standardSelect" tabindex="1">
-                            <option value="" label="default"></option>
-                            <option value="United States">United States</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="Afghanistan">Afghanistan</option>
-                            <option value="Aland Islands">Aland Islands</option>
-                            <option value="Albania">Albania</option>
-                            <option value="Algeria">Algeria</option>
-                            <option value="American Samoa">American Samoa</option>
-                            <option value="Andorra">Andorra</option>
-                            <option value="Angola">Angola</option>
-                            <option value="Anguilla">Anguilla</option>
-                            <option value="Antarctica">Antarctica</option>
-                        </select>
+                            <h4 class="box-title">Grafik</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card-body">
+                                    {{-- <div id="traffic-chart" class="traffic-chart"></div> --}}
+                                    {{-- {!! $chart->renderHtml() !!} --}}
+                                    <div id="chartTes" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                                </div>
+                            </div>
+                        </div> <!-- /.row -->
+                        <div class="card-body"></div>
                     </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <strong class="card-title">Multi Select</strong>
-                    </div>
-                    <div class="card-body">
-
-                    <select data-placeholder="Choose a country..." multiple class="standardSelect">
-                        <option value="" label="default"></option>
-                        <option value="United States">United States</option>
-                        <option value="United Kingdom">United Kingdom</option>
-                        <option value="Afghanistan">Afghanistan</option>
-                        <option value="Aland Islands">Aland Islands</option>
-                        <option value="Albania">Albania</option>
-                        <option value="Algeria">Algeria</option>
-                        <option value="American Samoa">American Samoa</option>
-                        <option value="Andorra">Andorra</option>
-                        <option value="Angola">Angola</option>
-                        <option value="Anguilla">Anguilla</option>
-                        <option value="Antarctica">Antarctica</option>
-                    </select>
-
-                </div>
+                </div><!-- /# column -->
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <strong class="card-title">Multi Select with Groups</strong>
-                </div>
-                <div class="card-body">
-
-                    <select data-placeholder="Your Favorite Football Team" multiple class="standardSelect" tabindex="5">
-                        <option value="" label="default"></option>
-                        <optgroup label="NFC EAST">
-                            <option>Dallas Cowboys</option>
-                            <option>New York Giants</option>
-                            <option>Philadelphia Eagles</option>
-                            <option>Washington Redskins</option>
-                        </optgroup>
-                        <optgroup label="NFC NORTH">
-                            <option>Chicago Bears</option>
-                            <option>Detroit Lions</option>
-                            <option>Green Bay Packers</option>
-                            <option>Minnesota Vikings</option>
-                        </optgroup>
-                        <optgroup label="NFC SOUTH">
-                            <option>Atlanta Falcons</option>
-                            <option>Carolina Panthers</option>
-                            <option>New Orleans Saints</option>
-                            <option>Tampa Bay Buccaneers</option>
-                        </optgroup>
-                        <optgroup label="NFC WEST">
-                            <option>Arizona Cardinals</option>
-                            <option>St. Louis Rams</option>
-                            <option>San Francisco 49ers</option>
-                            <option>Seattle Seahawks</option>
-                        </optgroup>
-                        <optgroup label="AFC EAST">
-                            <option>Buffalo Bills</option>
-                            <option>Miami Dolphins</option>
-                            <option>New England Patriots</option>
-                            <option>New York Jets</option>
-                        </optgroup>
-                        <optgroup label="AFC NORTH">
-                            <option>Baltimore Ravens</option>
-                            <option>Cincinnati Bengals</option>
-                            <option>Cleveland Browns</option>
-                            <option>Pittsburgh Steelers</option>
-                        </optgroup>
-                        <optgroup label="AFC SOUTH">
-                            <option>Houston Texans</option>
-                            <option>Indianapolis Colts</option>
-                            <option>Jacksonville Jaguars</option>
-                            <option>Tennessee Titans</option>
-                        </optgroup>
-                        <optgroup label="AFC WEST">
-                            <option>Denver Broncos</option>
-                            <option>Kansas City Chiefs</option>
-                            <option>Oakland Raiders</option>
-                            <option>San Diego Chargers</option>
-                        </optgroup>
-                    </select>
-                </div>
-            </div>
+            <!--  /Traffic -->
+            <div class="clearfix"></div>
+        <!-- /#add-category -->
         </div>
+        <!-- .animated -->
     </div>
+@endsection
+
+@section('javascript')
+<script src="http://github.highcharts.com/master/highcharts.js"></script>
+<script src="http://github.highcharts.com/master/modules/drilldown.js"></script>
+<script>
+    $(document).ready(function() {
+        var drilldownTitle = 'Kembali';
+        var options = {
+            chart: {
+                renderTo: 'chartTes',
+                type: 'column',
+            },
+            title: {
+                text: 'Laporan Pembelian Barang Per Tahun'
+            },
+            subtitle: {
+                text: 'ini adalah grafik laporan pembelian barang ke supplier per tahun.'
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: 'Nominal'
+                },
+                labels: {
+                    formatter: function () {
+                        return IDRFormatter(this.value, 'Rp. ');
+                    }
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function () {
+                            return IDRFormatter(this.y, 'Rp. ');
+                        }
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> nominal pembelian<br/>'
+            },
+            series: {},
+            drilldown: {
+                series: {}
+            }
+        };
+
+        function IDRFormatter(angka, prefix) {
+            var number_string = angka.toString().replace(/[^,\d]/g, ''),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        function getDataPurchasing() {
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "{{ route('report.sumPurchasingByYear') }}",
+                beforeSend: function () {
+                },
+                success: function (data) {
+                    options.series = data.tahun;
+                    options.drilldown.series = data.bulan;
+                    var chart = new Highcharts.Chart(options);
+                    //console.log('options', options)
+                },
+                error: function (txt) {
+                    // Report errors here...
+                }
+            });
+        }
+        getDataPurchasing();
+    });
+</script>
+
 @endsection

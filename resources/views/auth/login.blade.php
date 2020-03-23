@@ -91,21 +91,24 @@
                             html += '</div>';
                             // $('#email').val('');
                             // $('#password').val('');
+                            $('#loginBtn').removeAttr('disabled');
                             $('#loginBtn').html('Login');
                         }
                         if(data.error_login) {
                             html = '<div class="alert alert-danger">' + data.error_login + '</div>';
                             $('#email').val('');
                             $('#password').val('');
+                            $('#loginBtn').removeAttr('disabled');
                             $('#loginBtn').html('Login');
                         }
                         if(data.success) {
                             //html = '<div class="alert alert-success">' + data.success + '</div>';
                             $('#loginBtn').html('Data ditemukan..');
+                            //$('#loginBtn').removeAttr('disabled');
                             //$('#loginBtn').prop('disabled', true);
                             location.reload(true);
                         }
-                        $('#loginBtn').removeAttr('disabled');
+                        //$('#loginBtn').removeAttr('disabled');
                         $('#form_result_table').html(html);
                     },
                     error: function(xhr, status, error) {
