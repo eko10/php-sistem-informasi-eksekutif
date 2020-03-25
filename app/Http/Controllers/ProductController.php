@@ -128,6 +128,7 @@ class ProductController extends Controller
     }
 
     public function searchByCode(Request $request){
+        
         if($request->ajax()) {
             $data = Product::where('product_number', 'LIKE', $request->product.'%')
                             ->orWhere('name', 'LIKE', $request->product.'%')

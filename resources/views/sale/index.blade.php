@@ -44,7 +44,7 @@
                     <div class="card-header">
                         {{-- <strong class="card-title">Data Product</strong> --}}
                         <div class="pull-left">
-                        <a class="btn btn-success" href="{{ route('sale.create') }}" id="createNewProduct"> Tambah Data</a>
+                            <a class="btn btn-success" href="{{ route('sale.create') }}" id="createNewProduct"> Tambah Data</a>
                         </div>
                     </div>
                     <div class="card-body">

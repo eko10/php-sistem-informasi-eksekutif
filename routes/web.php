@@ -62,5 +62,6 @@ Route::group(['middleware' => ['auth','checkRole:eksekutif,admin']], function(){
 	// dashboard
 	Route::get('/dashboard', 'DashboardController@index');
 	Route::get('report/sumPurchasingByYear', 'ReportController@sumPurchasingByYear')->name('report.sumPurchasingByYear');
+	Route::get('report/sumPurchasingTest', 'ReportController@sumPurchasingTest')->name('report.sumPurchasingTest');
 	Route::get('report/sumPurchasingByMonth', 'ReportController@sumPurchasingByMonth')->name('report.sumPurchasingByMonth');
 });
