@@ -81,6 +81,7 @@ class ReportController extends Controller
                             ->get();
                 }
 
+                $data_month_h['colorByPoint'] = true;
                 $data_month_h['name'] = $dt->name;
                 $data_month_h['id'] = $dt->name;
                 $data_month_h['data'] = array();
@@ -106,7 +107,6 @@ class ReportController extends Controller
             );
 
             echo json_encode($response);
-
         }
     }
 
