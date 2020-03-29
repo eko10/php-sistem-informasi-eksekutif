@@ -171,8 +171,10 @@
             var select = $('#pilihPurchasingByMonth').val();
             var res = select.split(" ");
             var tahun = res[0];
+            var today = new Date();
+            var tahunNow = (tahun == '') ? today.getFullYear() : tahun;
             var semester = res[2];
-            getDataPurchasingByMonth(tahun, semester);
+            getDataPurchasingByMonth(tahunNow, semester);
         });
 
         var options = {
