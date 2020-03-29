@@ -83,13 +83,26 @@
                     <div class="card-header">
                         {{-- <strong class="card-title">Grafik</strong> --}}
                         <div class="pull-right">
-                            <select id="pilihTahunSale" class="form-control">
-                                <option value="all">All</option>
-                                <option value="2016">2016</option>
-                                <option value="2017">2017</option>
-                                <option value="2018">2018</option>
-                                <option value="2019">2019</option>
-                                <option value="2020">2020</option>
+                            <select id="pilihPurchasingByMonth" class="form-control">
+                                <option value="" selected>Semester Tahun Ini</option>
+                                @php
+                                    $firstYear = (int)date('Y') - 5;
+                                    $lastYear = $firstYear + 5;
+                                    for($i=$firstYear;$i<=$lastYear;$i++){
+                                        $yearNow = date('Y');
+                                        $monthNow = date('M');
+                                        if($monthNow <= 6){
+                                            $semester = '1';
+                                        }else{
+                                            $semester = '2';
+                                        }
+                                        $selected = ($i == $yearNow) ? 'selected' : ' ';
+                                        echo '
+                                            <option value="'.$i.' - 1">'.$i.' - 1</option>
+                                            <option value="'.$i.' - 2">'.$i.' - 2</option>
+                                        ';
+                                    }
+                                @endphp
                             </select>
                         </div>
                     </div>
@@ -99,7 +112,7 @@
                         <div class="col-lg-12">
                             <div class="card-body">
                                 <figure class="highcharts-figure">
-                                    <div id="chartSaleByCategory" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                                    <div id="chartPurchasingByMonth" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                                 </figure>
                             </div>
                         </div>
@@ -151,6 +164,83 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+    $(document).ready(function() {
+
+        $('#pilihPurchasingByMonth').on('change', function(){
+            var select = $('#pilihPurchasingByMonth').val();
+            var res = select.split(" ");
+            var tahun = res[0];
+            var semester = res[2];
+            getDataPurchasingByMonth(tahun, semester);
+        });
+
+        var options = {
+            chart: {
+                renderTo: 'chartPurchasingByMonth',
+                type: 'column'
+            },
+            title: {},
+            subtitle: {
+                text: 'ini adalah grafik laporan pembelian barang ke supplier per semester.'
+            },
+            xAxis: {
+                crosshair: true,
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Jumlah'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [],
+        };
+
+        function getDataPurchasingByMonth(tahun, semester) {
+            var today = new Date();
+            var tahun = tahun;
+            var semesterNow = (today.getMonth() <= 6) ? '1' : '2';
+            var semester = (semester == undefined) ? semesterNow : semester;
+            var year = (tahun == undefined) ? today.getFullYear() : tahun;
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "{{ route('report.sumPurchasingByMonth') }}",
+                data: {
+                    'tahun': tahun,
+                    'semester': semester
+                },
+                beforeSend: function () {
+                },
+                success: function (data) {
+                    options.series = data.kategori_barang;
+                    options.xAxis.categories = data.bulan;
+                    options.title.text = 'Laporan Pembelian Barang Semester '+ semester +' Tahun ' + year;
+                    var chart = new Highcharts.Chart(options);
+                    //console.log(chart);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+        getDataPurchasingByMonth();
+    });
+</script>
 <script>
     $(document).ready(function() {
 

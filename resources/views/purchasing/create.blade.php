@@ -36,7 +36,7 @@
                     <div class="card-body">
 
                         <form id="purchasingForm" name="purchasingForm">
-                            <input type="text" name="product_id" id="product_id">
+                            <input type="hidden" name="product_id" id="product_id">
                             <div class="row">
                                 <div class="col md-2">
                                     <label for="product_code" class="form-control-label">Kode Barang</label>
