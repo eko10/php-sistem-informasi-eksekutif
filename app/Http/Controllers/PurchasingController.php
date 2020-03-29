@@ -144,7 +144,7 @@ class PurchasingController extends Controller
         $product->stock = $stock_update;
         $product->save();
    
-        Cookie::queue('save_purchasing', 'Data berhasil disimpan.', 500);
+        //Cookie::queue('save_purchasing', 'Data berhasil disimpan.', 500);
         return response()->json(['success' => 'Data berhasil disimpan.']);
     }
 

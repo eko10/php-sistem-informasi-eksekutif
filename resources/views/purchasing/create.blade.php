@@ -204,7 +204,6 @@
             $('#stokBarang').val(stock);
             $("#totalHargaBarang").val(total);
             $('#productModal').modal('hide');
-            //$("#quantity").attr('maxlength','1');
             $('#quantity').focus();
         });
 
@@ -246,7 +245,9 @@
                         html += '</div>';
                     }
                     if(data.success) {
-                        window.location='/purchasing';
+                        //window.location='/purchasing';
+                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        $('#form_result_table').html(html);
                         $('#purchasingForm').trigger("reset");
                         $("#supplier").val('').trigger("change");
                         $('#saveBtn').html('Simpan');

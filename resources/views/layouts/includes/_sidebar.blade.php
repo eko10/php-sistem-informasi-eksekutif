@@ -1,9 +1,9 @@
-<aside id="left-panel" class="left-panel">
+<aside id="left-panel" class="{{ (Request::segment(1) == 'report') ? 'left-panel' : 'left-panel open-menu' }}">
     <nav class="navbar navbar-expand-sm navbar-default">
         <div id="main-menu" class="main-menu collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="{{ setActive('dashboard', 'active') }}">
-                    <a href="/dashboard"><i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
+                    <a href="/dashboard"><i class="menu-icon fa fa-dashboard"></i>Dashboard</a>
                 </li>
                 @if(auth()->user()->role == 'admin')
                 <li class="{{ setActive('user', 'active') }}">

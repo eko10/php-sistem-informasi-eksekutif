@@ -132,7 +132,7 @@ class SaleController extends Controller
         //     }
         // }
    
-        Cookie::queue('save_sale', 'Data berhasil disimpan.', 500);
+        //Cookie::queue('save_sale', 'Data berhasil disimpan.', 500);
         return response()->json(['success' => 'Data berhasil disimpan.']);
     }
 

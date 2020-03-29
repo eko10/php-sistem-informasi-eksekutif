@@ -288,9 +288,9 @@
                         html += '</div>';
                     }
                     if(data.success) {
-                        //html = '<div class="alert alert-success">' + data.success + '</div>';
-                        //$('#form_result_table').html(html);
-                        window.location='/sale';
+                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        $('#form_result_table').html(html);
+                        //window.location='/sale';
                         $('#saleForm').trigger("reset");
                         $("#supplier").val('').trigger("change");
                         $('#saveBtn').html('Simpan');

@@ -38,12 +38,10 @@ Route::group(['middleware' => ['auth','checkRole:admin']], function(){
 	// major
 	Route::resource('major', 'MajorController');
 	Route::post('major/update', 'MajorController@update')->name('major.update');
-	//Route::get('major/search', 'MajorController@search')->name('major.search');
 	Route::get('majorSearch/{id}', 'MajorController@search');
 	// purchasing
 	Route::resource('purchasing', 'PurchasingController');
 	Route::get('purchasing/create', 'PurchasingController@create')->name('purchasing.create');
-	//Route::post('purchasing/insert', 'PurchasingController@insert')->name('purchasing.insert');
 	Route::post('purchasing/update', 'PurchasingController@update')->name('purchasing.update');
 	Route::get('purchasing/search', 'PurchasingController@search')->name('purchasing.search');
 	// sale
