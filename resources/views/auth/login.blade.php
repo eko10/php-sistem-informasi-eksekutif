@@ -29,6 +29,13 @@
                     </a>
                 </div>
                 <div class="login-form">
+                    <p class="text-center">
+                        <b>Login Admin</b><br>
+                        Username : admin@itslogistik.com, Password : 123456
+                        <br>
+                        <b>Login Eksekutif</b><br>
+                        Username : eksekutif@itslogistik.com, Password : 123456
+                    </p>
                     <span id="form_result_table"></span>
                     <form id="loginForm" name="loginForm" role="form">
                         <div class="form-group">
@@ -74,7 +81,7 @@
                 e.preventDefault();
                 $.ajax({
                     data: $('#loginForm').serialize(),
-                    url: '/prosesLogin',
+                    url: '{{ route("prosesLogin") }}',
                     type: 'POST',
                     dataType: 'json',
                     beforeSend: function() {

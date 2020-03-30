@@ -16,7 +16,7 @@
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
                             <li>Home</li>
-                            <li class="active"><a href="/user">User</a></li>
+                            <li class="active"><a href="{{ url('user') }}">User</a></li>
                         </ol>
                     </div>
                 </div>
@@ -268,7 +268,7 @@
             $(this).html('Proses..');
             $.ajax({
                 data: $('#editUserForm').serialize(),
-                url: "/editUser",
+                url: "{{ route('user.edit') }}",
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {

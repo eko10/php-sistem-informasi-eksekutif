@@ -66,11 +66,13 @@ class UserController extends Controller
         $error = Validator::make($request->all(), [
             'edit_name'     =>  'required',
             'edit_email'    =>  'required|email',
+            //'edit_password' =>  'min:6',
             'edit_role'     =>  'required',
         ], [
             'edit_name.required' => 'Nama tidak boleh kosong !',
             'edit_email.required' => 'Email tidak boleh kosong !',
             'edit_email.email' => 'Format email anda salah !',
+            //'edit_password.min' => 'Password minimal 6 karakter !',
             'edit_role.required' => 'Role tidak boleh kosong !'
         ]);
 

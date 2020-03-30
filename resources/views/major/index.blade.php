@@ -119,7 +119,7 @@
             placeholder: 'pilih fakultas',
             allowClear: true,
             ajax: {
-                url: '/facultySearch',
+                url: '{{ route("faculty.search") }}',
                 dataType: 'json',
             },
         });

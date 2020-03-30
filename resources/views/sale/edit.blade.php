@@ -107,7 +107,7 @@
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-primary" id="updateBtn" value="create">Simpan</button>
-                                <a href="/sale" class="btn btn-default">Batal</a>
+                                <a href="{{ url('sale') }}" class="btn btn-default">Batal</a>
                             </div>
                         </form>
                     </div>
@@ -157,8 +157,8 @@
             placeholder: 'pilih fakultas',
             allowClear: true,
             ajax: {
-                url: '/facultySearch',
-                dataType: 'json',
+                url: "{{ route('faculty.search') }}",
+                dataType: "json",
             },
         });
 
@@ -171,7 +171,7 @@
             var faculty_id = $(this).val();
             if(faculty_id) {
                 $.ajax({
-                    url: '/majorSearch/' + faculty_id,
+                    url: "{{ url('/majorSearch/') }}" + "/" + faculty_id,
                     type: "GET",
                     dataType: "json",
                     success:function(data) {
@@ -193,10 +193,10 @@
         $('#product_code').on('keyup',function() {
             let query = $(this).val();
             $.ajax({
-                url:"/productSearchByCode",
-                type:"GET",
-                data:{'product':query},
-                success:function (data) {
+                url: "{{ route('product.searchByCode') }}",
+                type: "GET",
+                data: {'product':query},
+                success: function (data) {
                     $('#product_list').html(data);
                 }
             });
@@ -312,11 +312,11 @@
                         html += '</div>';
                     }
                     if(data.success) {
-                        //html = '<div class="alert alert-success">' + data.success + '</div>';
-                        //$('#form_result_table').html(html);
-                        window.location='/sale';
-                        $('#saleForm').trigger("reset");
-                        $("#supplier").val('').trigger("change");
+                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        $('#form_result_table').html(html);
+                        //window.location = "{{ url('sale') }}";
+                        //$('#saleForm').trigger("reset");
+                        //$("#supplier").val('').trigger("change");
                         $('#updateBtn').html('Simpan');
                         // location.reload(true);
                     }

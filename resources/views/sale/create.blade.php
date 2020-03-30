@@ -107,7 +107,7 @@
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-success" id="saveBtn" value="create">Simpan</button>
-                                <a href="/sale" class="btn btn-default">Batal</a>
+                                <a href="{{ url('sale') }}", class="btn btn-default">Batal</a>
                             </div>
                         </form>
                     </div>
@@ -169,7 +169,7 @@
             var faculty_id = $(this).val();
             if(faculty_id) {
                 $.ajax({
-                    url: '/majorSearch/' + faculty_id,
+                    url: "{{ url('/majorSearch/') }}" + "/" + faculty_id,
                     type: "GET",
                     dataType: "json",
                     success:function(data) {
@@ -189,10 +189,10 @@
         $('#product_code').on('keyup',function() {
             var query = $(this).val();
             $.ajax({
-                url:"/productSearchByCode",
-                type:"GET",
-                data:{'product':query},
-                success:function (data) {
+                url: "{{ route('product.searchByCode') }}",
+                type: "GET",
+                data: {'product':query},
+                success: function (data) {
                     $('#product_list').html(data);
                 }
             });

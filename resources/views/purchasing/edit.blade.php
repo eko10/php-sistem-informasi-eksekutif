@@ -91,7 +91,7 @@
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-primary" id="updateBtn" value="create">Simpan</button>
-                                <a href="/purchasing" class="btn btn-default">Batal</a>
+                                <a href="{{ url('purchasing') }}" class="btn btn-default">Batal</a>
                             </div>
                         </form>
                     </div>
@@ -141,17 +141,17 @@
             placeholder: 'pilih supplier',
             allowClear: true,
             ajax: {
-                url: '/supplierSearch',
-                dataType: 'json',
+                url: "{{ route('supplier.search') }}",
+                dataType: "json",
             },
         });
 
         $('#product_code').on('keyup',function() {
             let query = $(this).val();
             $.ajax({
-                url:"/productSearchByCode",
-                type:"GET",
-                data:{'product':query},
+                url: "{{ route('product.searchByCode') }}",
+                type: "GET",
+                data: {'product':query},
                 success:function (data) {
                     $('#product_list').html(data);
                 }
@@ -268,11 +268,11 @@
                         html += '</div>';
                     }
                     if(data.success) {
-                        //html = '<div class="alert alert-success">' + data.success + '</div>';
-                        //$('#form_result_table').html(html);
-                        window.location='/purchasing';
-                        $('#purchasingForm').trigger("reset");
-                        $("#supplier").val('').trigger("change");
+                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        $('#form_result_table').html(html);
+                        //window.location = "{{ url('purchasing') }}";
+                        //$('#purchasingForm').trigger("reset");
+                        //$("#supplier").val('').trigger("change");
                         $('#updateBtn').html('Simpan');
                         // location.reload(true);
                     }

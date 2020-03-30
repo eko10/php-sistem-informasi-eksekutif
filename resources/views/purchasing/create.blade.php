@@ -89,7 +89,7 @@
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-success" id="saveBtn" value="create">Simpan</button>
-                                <a href="/purchasing" class="btn btn-default">Batal</a>
+                                <a href="{{ url('purchasing') }}" class="btn btn-default">Batal</a>
                             </div>
                         </form>
                     </div>
@@ -139,17 +139,17 @@
             placeholder: 'pilih supplier',
             allowClear: true,
             ajax: {
-                url: '/supplierSearch',
-                dataType: 'json',
+                url: "{{ route('supplier.search') }}",
+                dataType: "json",
             },
         });
 
         $('#product_code').on('keyup',function() {
             var query = $(this).val();
             $.ajax({
-                url:"/productSearchByCode",
-                type:"GET",
-                data:{'product':query},
+                url: "{{ route('product.searchByCode') }}",
+                type: "GET",
+                data: {'product':query},
                 success:function (data) {
                     $('#product_list').html(data);
                 }

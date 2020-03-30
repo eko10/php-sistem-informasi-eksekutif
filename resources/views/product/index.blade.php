@@ -137,7 +137,7 @@
             placeholder: 'pilih kategori',
             allowClear: true,
             ajax: {
-                url: '/categorySearch',
+                url: '{{ route("category.search") }}',
                 dataType: 'json',
             },
         });
