@@ -190,19 +190,103 @@ class ReportController extends Controller
             $array_data = array();
 
             if($request->tahun == ''){
+                if($request->semester == ''){
+                    if(date('M') <= 6){
+                        $semester = [
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6'
+                        ];
+                    }else{
+                        $semester = [
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11',
+                            '12'
+                        ];
+                    }
+                }else{
+                    if($request->semester == '1'){
+                        $semester = [
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6'
+                        ];
+                    }else{
+                        $semester = [
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11',
+                            '12'
+                        ];
+                    }
+                }
                 $data_category = DB::table('purchasings')
                     ->join('products', 'products.id', '=', 'purchasings.product_id')
                     ->join('categories', 'categories.id', '=', 'products.category_id')
                     ->select(DB::raw('categories.id, categories.name AS Kategori'))
                     ->whereYear(DB::raw('purchasings.created_at'), '=',  date('Y'))
+                    ->whereIn(DB::raw('MONTH(purchasings.created_at)'), $semester)
                     ->groupBy('categories.id')
                     ->get();
             }else{
+                if($request->semester == ''){
+                    if(date('M') <= 6){
+                        $semester = [
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6'
+                        ];
+                    }else{
+                        $semester = [
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11',
+                            '12'
+                        ];
+                    }
+                }else{
+                    if($request->semester == '1'){
+                        $semester = [
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6'
+                        ];
+                    }else{
+                        $semester = [
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11',
+                            '12'
+                        ];
+                    }
+                }
                 $data_category = DB::table('purchasings')
                     ->join('products', 'products.id', '=', 'purchasings.product_id')
                     ->join('categories', 'categories.id', '=', 'products.category_id')
                     ->select(DB::raw('categories.id, categories.name AS Kategori'))
                     ->whereYear(DB::raw('purchasings.created_at'), '=',  $request->tahun)
+                    ->whereIn(DB::raw('MONTH(purchasings.created_at)'), $semester)
                     ->groupBy('categories.id')
                     ->get();
             }
@@ -210,10 +294,52 @@ class ReportController extends Controller
             foreach ($data_category as $c) {
 
                 if($request->tahun == ''){
+                    if($request->semester == ''){
+                        if(date('M') <= 6){
+                            $semester = [
+                                '1',
+                                '2',
+                                '3',
+                                '4',
+                                '5',
+                                '6'
+                            ];
+                        }else{
+                            $semester = [
+                                '7',
+                                '8',
+                                '9',
+                                '10',
+                                '11',
+                                '12'
+                            ];
+                        }
+                    }else{
+                        if($request->semester == '1'){
+                            $semester = [
+                                '1',
+                                '2',
+                                '3',
+                                '4',
+                                '5',
+                                '6'
+                            ];
+                        }else{
+                            $semester = [
+                                '7',
+                                '8',
+                                '9',
+                                '10',
+                                '11',
+                                '12'
+                            ];
+                        }
+                    }
+
                     $data_bulan = DB::table('purchasings')
                     ->join('products', 'products.id', '=', 'purchasings.product_id')
                     ->join('categories', 'categories.id', '=', 'products.category_id')
-                    ->select(DB::raw("categories.id, categories.name AS Kategori,
+                    ->select(DB::raw("categories.id, categories.name AS Kategori, MONTH(purchasings.created_at) AS Bulan,
                             SUM(IF(MONTH(purchasings.created_at) = '1', purchasings.quantity, 0)) AS Januari,
                             SUM(IF(MONTH(purchasings.created_at) = '2', purchasings.quantity, 0)) AS Februari,
                             SUM(IF(MONTH(purchasings.created_at) = '3', purchasings.quantity, 0)) AS Maret,
@@ -228,13 +354,56 @@ class ReportController extends Controller
                             SUM(IF(MONTH(purchasings.created_at) = '12', purchasings.quantity, 0)) AS Desember"))
                     ->where(DB::raw('categories.id'), '=',  $c->id)
                     ->whereYear(DB::raw('purchasings.created_at'), '=',  date('Y'))
+                    ->whereIn(DB::raw('MONTH(purchasings.created_at)'), $semester)
                     ->groupBy('categories.id')
                     ->get();
                 }else{
+                    if($request->semester == ''){
+                        if(date('M') <= 6){
+                            $semester = [
+                                '1',
+                                '2',
+                                '3',
+                                '4',
+                                '5',
+                                '6'
+                            ];
+                        }else{
+                            $semester = [
+                                '7',
+                                '8',
+                                '9',
+                                '10',
+                                '11',
+                                '12'
+                            ];
+                        }
+                    }else{
+                        if($request->semester == '1'){
+                            $semester = [
+                                '1',
+                                '2',
+                                '3',
+                                '4',
+                                '5',
+                                '6'
+                            ];
+                        }else{
+                            $semester = [
+                                '7',
+                                '8',
+                                '9',
+                                '10',
+                                '11',
+                                '12'
+                            ];
+                        }
+                    }
+
                     $data_bulan = DB::table('purchasings')
                     ->join('products', 'products.id', '=', 'purchasings.product_id')
                     ->join('categories', 'categories.id', '=', 'products.category_id')
-                    ->select(DB::raw("categories.id, categories.name AS Kategori,
+                    ->select(DB::raw("categories.id, categories.name AS Kategori, MONTH(purchasings.created_at) AS Bulan,
                             SUM(IF(MONTH(purchasings.created_at) = '1', purchasings.quantity, 0)) AS Januari,
                             SUM(IF(MONTH(purchasings.created_at) = '2', purchasings.quantity, 0)) AS Februari,
                             SUM(IF(MONTH(purchasings.created_at) = '3', purchasings.quantity, 0)) AS Maret,
@@ -249,6 +418,7 @@ class ReportController extends Controller
                             SUM(IF(MONTH(purchasings.created_at) = '12', purchasings.quantity, 0)) AS Desember"))
                     ->where(DB::raw('categories.id'), '=',  $c->id)
                     ->whereYear(DB::raw('purchasings.created_at'), '=',  $request->tahun)
+                    ->whereIn(DB::raw('MONTH(purchasings.created_at)'), $semester)
                     ->groupBy('categories.id')
                     ->get();
                 }
@@ -341,15 +511,60 @@ class ReportController extends Controller
         $array_bulan = array();
         $array_data = array();
 
+        $semester = '1';
+
+        if($semester == '1'){
+            $bulan = [
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6'
+            ];
+        }else{
+            $bulan = [
+                '7',
+                '8',
+                '9',
+                '10',
+                '11',
+                '12'
+            ];
+        }
+
         $data_category = DB::table('purchasings')
                 ->join('products', 'products.id', '=', 'purchasings.product_id')
                 ->join('categories', 'categories.id', '=', 'products.category_id')
                 ->select(DB::raw('categories.id, categories.name AS Kategori'))
                 ->whereYear(DB::raw('purchasings.created_at'), '=',  date('Y'))
+                ->whereIn(DB::raw('MONTH(purchasings.created_at)'), $bulan)
                 ->groupBy('categories.id')
                 ->get();
 
         foreach ($data_category as $c) {
+
+            $semester = '1';
+
+            if($semester == '1'){
+                $bulan = [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5',
+                    '6'
+                ];
+            }else{
+                $bulan = [
+                    '7',
+                    '8',
+                    '9',
+                    '10',
+                    '11',
+                    '12'
+                ];
+            }
 
             $data_bulan = DB::table('purchasings')
                 ->join('products', 'products.id', '=', 'purchasings.product_id')
@@ -369,6 +584,7 @@ class ReportController extends Controller
                         SUM(IF(MONTH(purchasings.created_at) = '12', purchasings.quantity, 0)) AS Desember"))
                 ->where(DB::raw('categories.id'), '=',  $c->id)
                 ->whereYear(DB::raw('purchasings.created_at'), '=',  date('Y'))
+                ->whereIn(DB::raw('MONTH(purchasings.created_at)'), $bulan)
                 ->groupBy('categories.id')
                 ->get();
 

@@ -1,4 +1,8 @@
-<aside id="left-panel" class="{{ (Request::segment(1) == 'report') ? 'left-panel' : 'left-panel open-menu' }}">
+@if(Request::segment(1) == 'report')
+<aside id="left-panel" class="left-panel">
+@else
+<aside id="left-panel" class="left-panel open-menu">
+@endif
     <nav class="navbar navbar-expand-sm navbar-default">
         <div id="main-menu" class="main-menu collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -7,7 +11,7 @@
                 </li>
                 @if(auth()->user()->role == 'admin')
                 <li class="{{ setActive('user', 'active') }}">
-                    <a href="{{ url('user') }}"> <i class="menu-icon ti-user"></i>User </a>
+                    <a href="{{ url('user') }}"> <i class="menu-icon ti-user"></i>User</a>
                 </li>
                 <li class="{{ setActive('category', 'active') }}">
                     <a href="{{ url('category') }}"> <i class="menu-icon ti-layout-media-center-alt"></i>Kategori Barang </a>

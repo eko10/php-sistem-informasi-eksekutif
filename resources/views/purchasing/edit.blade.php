@@ -1,5 +1,9 @@
 @extends('layouts.master')
 
+@section('css')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+@endsection
+
 @section('content')
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -85,9 +89,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="total_price" class="form-control-label">Total Harga</label>
-                                <input type="number" value="{{ $purchasing->total_price }}" class="form-control" id="totalHargaBarang" name="total_price" placeholder="Harga Barang" readonly>
+                            <div class="row">
+                                <div class="col md-4">
+                                    <div class="form-group">
+                                        <label for="order_date" class="form-control-label">Tanggal</label>
+                                        <input type="text" value="{{ $purchasing->order_date }}" class="form-control" id="order_date" name="order_date" placeholder="Tanggal Pembelian">
+                                    </div>
+                                </div>
+                                <div class="col md-4">
+                                    <div class="form-group">
+                                        <label for="total_price" class="form-control-label">Total Harga</label>
+                                        <input type="number" value="{{ $purchasing->total_price }}" class="form-control" id="totalHargaBarang" name="total_price" placeholder="Harga Barang" readonly>
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-primary" id="updateBtn" value="create">Simpan</button>
@@ -128,6 +142,7 @@
 
 @endsection
 @section('javascript')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
     $(document).ready(function() {
 
@@ -135,6 +150,11 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+
+        $('#order_date').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true
         });
 
         $('#supplier').select2({
@@ -247,6 +267,7 @@
                 });
                 $('#price').val(data.price);
                 $('#stock').val(data.stock);
+                $('#order_date').val(data.order_date);
             });
         });
         

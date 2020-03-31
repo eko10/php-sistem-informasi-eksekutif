@@ -28,7 +28,6 @@ class ProductController extends Controller
                     ->editColumn('price', function($data){
                         return formatRupiah($data->price);
                     })
-                    
                     ->make(true);
         }
       

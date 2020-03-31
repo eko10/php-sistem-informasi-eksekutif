@@ -10,7 +10,7 @@ class Sale extends Model
     use AutoNumberTrait;
 
     protected $fillable = [
-        'sales_number', 'customer_name', 'user_id', 'product_id', 'faculty_id', 'major_id', 'quantity', 'price', 'total_price'
+        'sales_number', 'customer_name', 'user_id', 'product_id', 'faculty_id', 'major_id', 'quantity', 'price', 'total_price', 'order_date'
     ];
 
     public function getAutoNumberOptions()

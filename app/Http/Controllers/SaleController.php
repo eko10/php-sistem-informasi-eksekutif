@@ -68,17 +68,19 @@ class SaleController extends Controller
     {
         
         $error = Validator::make($request->all(), [
-            'product_id'  => 'required',
+            'product_id'    => 'required',
             'customer_name' => 'required',
-            'faculty_id' => 'required',
-            'major_id' => 'required',
-            'quantity'    => 'required'
+            'faculty_id'    => 'required',
+            'major_id'      => 'required',
+            'quantity'      => 'required',
+            'order_date'    => 'required'
         ], [
             'product_id.required' => 'Kode Barang tidak boleh kosong !',
             'customer_name.required' => 'Nama Customer tidak boleh kosong !',
             'faculty_id.required' => 'Fakultas tidak boleh kosong !',
             'major_id.required' => 'Jurusan tidak boleh kosong !',
-            'quantity.required' => 'Quantity tidak boleh kosong !'
+            'quantity.required' => 'Quantity tidak boleh kosong !',
+            'order_date.required' => 'Tanggal tidak boleh kosong !'
         ]);
 
         if($error->fails())
@@ -94,6 +96,7 @@ class SaleController extends Controller
             'quantity' => $request->quantity,
             'price' => $request->price,
             'total_price' => $request->total_price,
+            'order_date' => $request->order_date,
             'user_id' => Auth::user()->id,
         ]);
 
@@ -102,35 +105,6 @@ class SaleController extends Controller
         $stock_update = $stock_now + $request->quantity;
         $product->stock = $stock_update;
         $product->save();
-
-        // if(empty($request->sale_id)){
-        //     $product = Product::find($request->product_id);
-        //     $stock_now = $product->stock;
-        //     $stock_update = $stock_now - $request->quantity;
-        //     $product->stock = $stock_update;
-        //     $product->save();
-        // }else{
-        //     $sale = Sale::find($request->sale_id);
-        //     if($sale->quantity >= $request->quantity){
-        //         $product = Product::find($request->product_id);
-        //         $stock_now = $product->stock;
-        //         $stock_update = $stock_now + $request->quantity;
-        //         $product->stock = $stock_update;
-        //         $product->save();
-        //     }else if($sale->quantity <= $request->quantity){
-        //         $product = Product::find($request->product_id);
-        //         $stock_now = $product->stock;
-        //         $stock_update = $stock_now - $request->quantity;
-        //         $product->stock = $stock_update;
-        //         $product->save();
-        //     }else if($sale->quantity == $request->quantity){
-        //         $product = Product::find($request->product_id);
-        //         $stock_now = $product->stock;
-        //         $stock_update = $stock_now;
-        //         $product->stock = $stock_update;
-        //         $product->save();
-        //     }
-        // }
    
         //Cookie::queue('save_sale', 'Data berhasil disimpan.', 500);
         return response()->json(['success' => 'Data berhasil disimpan.']);

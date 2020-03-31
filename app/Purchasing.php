@@ -10,7 +10,7 @@ class Purchasing extends Model
     use AutoNumberTrait;
 
     protected $fillable = [
-        'trans_number', 'user_id', 'product_id', 'supplier_id', 'quantity', 'price', 'total_price'
+        'trans_number', 'user_id', 'product_id', 'supplier_id', 'quantity', 'price', 'total_price', 'order_date'
     ];
 
     public function getAutoNumberOptions()

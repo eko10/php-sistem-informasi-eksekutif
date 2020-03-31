@@ -78,11 +78,13 @@ class PurchasingController extends Controller
         $this->validate($request, [
             'product_id'  => 'required',
             'supplier_id' => 'required',
-            'quantity'    => 'required'
+            'quantity'    => 'required',
+            'order_date'  => 'required'
         ], [
             'product_id.required' => 'Kode Barang tidak boleh kosong !',
             'supplier_id.required' => 'Supplier tidak boleh kosong !',
-            'quantity.required' => 'Quantity tidak boleh kosong !'
+            'quantity.required' => 'Quantity tidak boleh kosong !',
+            'order_date.required' => 'Tanggal tidak boleh kosong !'
         ]);
 
         // if($error->fails())
@@ -115,11 +117,13 @@ class PurchasingController extends Controller
         $error = Validator::make($request->all(), [
             'product_id'  => 'required',
             'supplier_id' => 'required',
-            'quantity'    => 'required'
+            'quantity'    => 'required',
+            'order_date'  => 'required'
         ], [
             'product_id.required' => 'Kode Barang tidak boleh kosong !',
             'supplier_id.required' => 'Supplier tidak boleh kosong !',
-            'quantity.required' => 'Quantity tidak boleh kosong !'
+            'quantity.required' => 'Quantity tidak boleh kosong !',
+            'order_date.required' => 'Tanggal tidak boleh kosong !'
         ]);
 
         if($error->fails())
@@ -135,6 +139,7 @@ class PurchasingController extends Controller
             'quantity' => $request->quantity,
             'price' => $request->price,
             'total_price' => $request->total_price,
+            'order_date' => $request->order_date,
             'user_id' => Auth::user()->id,
         ]);
 
