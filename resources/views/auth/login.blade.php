@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="{{asset('admin/assets/css/cs-skin-elastic.css')}}">
     <link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+    {{-- <style>
+        .error { color:red; } 
+    </style> --}}
 </head>
 <body class="bg-dark">
     <div class="sufee-login d-flex align-content-center flex-wrap">
@@ -37,23 +40,20 @@
                         Username : eksekutif@itslogistik.com, Password : 123456
                     </p>
                     <span id="form_result_table"></span>
-                    <form id="loginForm" name="loginForm" role="form">
+                    <form id="loginForm" name="loginForm" role="form" method="POST" action="javascript:void(0)">
                         <div class="form-group">
                             <label>Email</label>
                             <input type="email" id="email" class="form-control" placeholder="Email" name="email">
+                            <span class="help-block">{{ $errors->first('email') }}</span>
                         </div>
                         <div class="form-group">
                             <label>Password</label>
                             <input type="password" id="password" class="form-control" placeholder="Password" name="password">
+                            <span class="help-block">
+                                <p style="text-transform: uppercase; color: #ffffff;">
+                                    {{ $errors->first('password') }}</span>
+                                </p>
                         </div>
-                        {{-- <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                            </label>
-                            <label class="pull-right">
-                                <a href="#">Forgotten Password?</a>
-                            </label>
-                        </div> --}}
                         <button type="submit" id="loginBtn" class="btn btn-success btn-flat m-b-30 m-t-30">Login</button>
                     </form>
                 </div>
@@ -65,71 +65,90 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-    <script src="{{asset('admin/assets/js/main.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="{{asset('admin/assets/js/main.js')}}"></script>
     <script>
-        $(document).ready(function () {
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $('#loginBtn').click(function (e) {
-                e.preventDefault();
-                $.ajax({
-                    data: $('#loginForm').serialize(),
-                    url: '{{ route("prosesLogin") }}',
-                    type: 'POST',
-                    dataType: 'json',
-                    beforeSend: function() {
-                        $('#loginBtn').html('Proses..');
-                        $('#loginBtn').prop('disabled', true);
+        $(document).ready(function(){
+            if ($("#loginForm").length > 0) {
+                $("#loginForm").validate({
+                    rules: {
+                        email: {
+                            required: true,
+                            maxlength: 50,
+                            email: true,
+                        },
+                        password: {
+                            required: true,
+                            minlength: 6
+                        },   
                     },
-                    success: function(data) {
-                        var html = '';
-                        if(data.errors) {
-                            html = '<div class="alert alert-danger">';
-                            for(var count = 0; count < data.errors.length; count++) {
-                                html += data.errors[count] + '<br>';
+                    messages: { 
+                        email: {
+                            required: "Email harus diisi!",
+                            email: "Email tidak valid!",
+                            maxlength: "Email maksimal 50 karakter!",
+                        },
+                        password: {
+                            required: "Password harus diisi!",
+                            minlength: "Password minimal 6 karakter!"
+                        }, 
+                    },
+                    submitHandler: function(form) {
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             }
-                            html += '</div>';
-                            // $('#email').val('');
-                            // $('#password').val('');
-                            $('#loginBtn').removeAttr('disabled');
-                            $('#loginBtn').html('Login');
-                        }
-                        if(data.error_login) {
-                            html = '<div class="alert alert-danger">' + data.error_login + '</div>';
-                            $('#email').val('');
-                            $('#password').val('');
-                            $('#loginBtn').removeAttr('disabled');
-                            $('#loginBtn').html('Login');
-                        }
-                        if(data.success) {
-                            //html = '<div class="alert alert-success">' + data.success + '</div>';
-                            $('#loginBtn').html('Data ditemukan..');
-                            //$('#loginBtn').removeAttr('disabled');
-                            //$('#loginBtn').prop('disabled', true);
-                            location.reload(true);
-                        }
-                        //$('#loginBtn').removeAttr('disabled');
-                        $('#form_result_table').html(html);
-                    },
-                    error: function(xhr, status, error) {
-                        let json = JSON.parse(xhr.responseText);
-                        let message = json.message;
-                        html = '<div class="alert alert-danger">' + message + '.</div>';
-                        $('#loginBtn').removeAttr('disabled');
-                        $('#loginBtn').html('Login');
-                        $('#form_result_table').html(html);
+                        });
+                        //$('#loginBtn').click(function (e) {
+                            //e.preventDefault();
+                        $.ajax({
+                            data: $('#loginForm').serialize(),
+                            url: '{{ route("prosesLogin") }}',
+                            type: 'POST',
+                            dataType: 'json',
+                            beforeSend: function() {
+                                $('#loginBtn').html('Proses..');
+                                $('#loginBtn').prop('disabled', true);
+                            },
+                            success: function(data) {
+                                var html = '';
+                                if(data.errors) {
+                                    html = '<div class="alert alert-danger">';
+                                    for(var count = 0; count < data.errors.length; count++) {
+                                        html += data.errors[count] + '<br>';
+                                    }
+                                    html += '</div>';
+                                    $('#loginBtn').removeAttr('disabled');
+                                    $('#loginBtn').html('Login');
+                                }
+                                if(data.error_login) {
+                                    html = '<div class="alert alert-danger">' + data.error_login + '</div>';
+                                    $('#email').val('');
+                                    $('#password').val('');
+                                    $('#loginBtn').removeAttr('disabled');
+                                    $('#loginBtn').html('Login');
+                                }
+                                if(data.success) {
+                                    $('#loginBtn').html('Data ditemukan..');
+                                    location.reload(true);
+                                }
+                                $('#form_result_table').html(html);
+                            },
+                            error: function(xhr, status, error) {
+                                let json = JSON.parse(xhr.responseText);
+                                let message = json.message;
+                                html = '<div class="alert alert-danger">' + message + '.</div>';
+                                $('#loginBtn').removeAttr('disabled');
+                                $('#loginBtn').html('Login');
+                                $('#form_result_table').html(html);
+                            }
+                        });
+                        //});
                     }
                 });
-            });
+            }   
         });
     </script>
-
 </body>
 </html>
