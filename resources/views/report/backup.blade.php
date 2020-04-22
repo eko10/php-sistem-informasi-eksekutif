@@ -1,3 +1,430 @@
+<?php 
+public function sumSaleByYear(Request $request){
+
+    if($request->ajax()) {
+
+        $array_tahun = array();
+        $array_bulan = array();
+        $array_data = array();
+
+        if($request->tahun == ''){
+            $data_tahun = DB::table('sales')
+                    ->join('products', 'products.id', '=', 'sales.product_id')
+                    ->join('categories', 'categories.id', '=', 'products.category_id')
+                    ->select(DB::raw('SUM(sales.quantity) AS sum, products.name AS produk, categories.name, categories.id AS category_id, YEAR(sales.order_date) AS year'))
+                    ->whereYear('sales.order_date', '=', date('Y'))
+                    ->groupBy('categories.name')
+                    ->get();
+        }else{
+            $data_tahun = DB::table('sales')
+                    ->join('products', 'products.id', '=', 'sales.product_id')
+                    ->join('categories', 'categories.id', '=', 'products.category_id')
+                    ->select(DB::raw('SUM(sales.quantity) AS sum, products.name AS produk, categories.name, categories.id AS category_id, YEAR(sales.order_date) AS year'))
+                    ->where(DB::raw('YEAR(sales.order_date)'), '=',  $request->tahun)
+                    ->groupBy('categories.name')
+                    ->get();
+        }
+        
+        foreach($data_tahun as $dt){
+            $jumlah = intval($dt->sum);
+            $data_year['name'] = $dt->name;
+            $data_year['y'] = $jumlah;
+            $data_year['drilldown'] = $dt->name;
+
+            array_push($array_tahun, $data_year);
+        }
+
+        $data_y = [
+            [
+                'colorByPoint' => true,
+                'name' => 'Kategori Barang',
+                'data' => $array_tahun
+            ]
+        ];
+        
+        foreach($data_tahun as $dt){
+
+            if($request->tahun == ''){
+
+                $data_bulan = DB::table('sales')
+                        ->join('products', 'products.id', '=', 'sales.product_id')
+                        ->join('categories', 'categories.id', '=', 'products.category_id')
+                        ->select(DB::raw('SUM(sales.quantity) as sum, products.name AS produk, categories.name, YEAR(sales.order_date) AS year'))
+                        ->where(DB::raw('categories.id'), '=',  $dt->category_id)
+                        ->whereYear('sales.order_date', '=', date('Y'))
+                        ->groupBy('products.name')
+                        ->get();
+
+            }else{
+                $data_bulan = DB::table('sales')
+                        ->join('products', 'products.id', '=', 'sales.product_id')
+                        ->join('categories', 'categories.id', '=', 'products.category_id')
+                        ->select(DB::raw('SUM(sales.quantity) as sum, products.name AS produk, categories.name, YEAR(sales.order_date) AS year'))
+                        ->where(DB::raw('categories.id'), '=',  $dt->category_id)
+                        ->where(DB::raw('YEAR(sales.order_date)'), '=',  $request->tahun)
+                        ->groupBy('products.name')
+                        ->get();
+            }
+
+            $data_month_h['colorByPoint'] = true;
+            $data_month_h['name'] = $dt->name;
+            $data_month_h['id'] = $dt->name;
+            $data_month_h['data'] = array();
+    
+            foreach($data_bulan as $dm){
+                $jumlah = intval($dm->sum);
+                $data_month = $dm->produk;
+                $data_month = $dm->sum;
+                $data_month_h['data'][] = [$dm->produk, $jumlah];
+
+            }
+
+            array_push($array_bulan, $data_month_h);
+        }
+
+        $array_hm['barang'] = $array_bulan;
+
+        array_push($array_data, $array_hm);
+
+        $response = array(
+            'kategori' => $data_y,
+            'barang' => $array_bulan,
+        );
+
+        echo json_encode($response);
+    }
+
+}
+
+public function sumSaleByMonth(Request $request){
+
+    if($request->ajax()) {
+
+        $array_tahun = array();
+        $array_bulan = array();
+        $array_data = array();
+
+        if($request->tahun == ''){
+            if($request->semester == ''){
+                if(date('M') <= 6){
+                    $semester = [
+                        '1',
+                        '2',
+                        '3',
+                        '4',
+                        '5',
+                        '6'
+                    ];
+                }else{
+                    $semester = [
+                        '7',
+                        '8',
+                        '9',
+                        '10',
+                        '11',
+                        '12'
+                    ];
+                }
+            }else{
+                if($request->semester == '1'){
+                    $semester = [
+                        '1',
+                        '2',
+                        '3',
+                        '4',
+                        '5',
+                        '6'
+                    ];
+                }else{
+                    $semester = [
+                        '7',
+                        '8',
+                        '9',
+                        '10',
+                        '11',
+                        '12'
+                    ];
+                }
+            }
+            $data_category = DB::table('sales')
+                ->join('products', 'products.id', '=', 'sales.product_id')
+                ->join('categories', 'categories.id', '=', 'products.category_id')
+                ->select(DB::raw('categories.id, categories.name AS Kategori'))
+                ->whereYear(DB::raw('sales.order_date'), '=',  date('Y'))
+                ->whereIn(DB::raw('MONTH(sales.order_date)'), $semester)
+                ->groupBy('categories.id')
+                ->get();
+        }else{
+            if($request->semester == ''){
+                if(date('M') <= 6){
+                    $semester = [
+                        '1',
+                        '2',
+                        '3',
+                        '4',
+                        '5',
+                        '6'
+                    ];
+                }else{
+                    $semester = [
+                        '7',
+                        '8',
+                        '9',
+                        '10',
+                        '11',
+                        '12'
+                    ];
+                }
+            }else{
+                if($request->semester == '1'){
+                    $semester = [
+                        '1',
+                        '2',
+                        '3',
+                        '4',
+                        '5',
+                        '6'
+                    ];
+                }else{
+                    $semester = [
+                        '7',
+                        '8',
+                        '9',
+                        '10',
+                        '11',
+                        '12'
+                    ];
+                }
+            }
+            $data_category = DB::table('sales')
+                ->join('products', 'products.id', '=', 'sales.product_id')
+                ->join('categories', 'categories.id', '=', 'products.category_id')
+                ->select(DB::raw('categories.id, categories.name AS Kategori'))
+                ->whereYear(DB::raw('sales.order_date'), '=',  $request->tahun)
+                ->whereIn(DB::raw('MONTH(sales.order_date)'), $semester)
+                ->groupBy('categories.id')
+                ->get();
+        }
+
+        foreach ($data_category as $c) {
+
+            if($request->tahun == ''){
+                if($request->semester == ''){
+                    if(date('M') <= 6){
+                        $semester = [
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6'
+                        ];
+                    }else{
+                        $semester = [
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11',
+                            '12'
+                        ];
+                    }
+                }else{
+                    if($request->semester == '1'){
+                        $semester = [
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6'
+                        ];
+                    }else{
+                        $semester = [
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11',
+                            '12'
+                        ];
+                    }
+                }
+
+                $data_bulan = DB::table('sales')
+                ->join('products', 'products.id', '=', 'sales.product_id')
+                ->join('categories', 'categories.id', '=', 'products.category_id')
+                ->select(DB::raw("categories.id, categories.name AS Kategori, MONTH(sales.order_date) AS Bulan,
+                        SUM(IF(MONTH(sales.order_date) = '1', sales.quantity, 0)) AS Januari,
+                        SUM(IF(MONTH(sales.order_date) = '2', sales.quantity, 0)) AS Februari,
+                        SUM(IF(MONTH(sales.order_date) = '3', sales.quantity, 0)) AS Maret,
+                        SUM(IF(MONTH(sales.order_date) = '4', sales.quantity, 0)) AS April,
+                        SUM(IF(MONTH(sales.order_date) = '5', sales.quantity, 0)) AS Mei,
+                        SUM(IF(MONTH(sales.order_date) = '6', sales.quantity, 0)) AS Juni,
+                        SUM(IF(MONTH(sales.order_date) = '7', sales.quantity, 0)) AS Juli,
+                        SUM(IF(MONTH(sales.order_date) = '8', sales.quantity, 0)) AS Agustus,
+                        SUM(IF(MONTH(sales.order_date) = '9', sales.quantity, 0)) AS September,
+                        SUM(IF(MONTH(sales.order_date) = '10', sales.quantity, 0)) AS Oktober,
+                        SUM(IF(MONTH(sales.order_date) = '11', sales.quantity, 0)) AS Nopember,
+                        SUM(IF(MONTH(sales.order_date) = '12', sales.quantity, 0)) AS Desember"))
+                ->where(DB::raw('categories.id'), '=',  $c->id)
+                ->whereYear(DB::raw('sales.order_date'), '=',  date('Y'))
+                ->whereIn(DB::raw('MONTH(sales.order_date)'), $semester)
+                ->groupBy('categories.id')
+                ->get();
+            }else{
+                if($request->semester == ''){
+                    if(date('M') <= 6){
+                        $semester = [
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6'
+                        ];
+                    }else{
+                        $semester = [
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11',
+                            '12'
+                        ];
+                    }
+                }else{
+                    if($request->semester == '1'){
+                        $semester = [
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                            '5',
+                            '6'
+                        ];
+                    }else{
+                        $semester = [
+                            '7',
+                            '8',
+                            '9',
+                            '10',
+                            '11',
+                            '12'
+                        ];
+                    }
+                }
+
+                $data_bulan = DB::table('sales')
+                ->join('products', 'products.id', '=', 'sales.product_id')
+                ->join('categories', 'categories.id', '=', 'products.category_id')
+                ->select(DB::raw("categories.id, categories.name AS Kategori, MONTH(sales.order_date) AS Bulan,
+                        SUM(IF(MONTH(sales.order_date) = '1', sales.quantity, 0)) AS Januari,
+                        SUM(IF(MONTH(sales.order_date) = '2', sales.quantity, 0)) AS Februari,
+                        SUM(IF(MONTH(sales.order_date) = '3', sales.quantity, 0)) AS Maret,
+                        SUM(IF(MONTH(sales.order_date) = '4', sales.quantity, 0)) AS April,
+                        SUM(IF(MONTH(sales.order_date) = '5', sales.quantity, 0)) AS Mei,
+                        SUM(IF(MONTH(sales.order_date) = '6', sales.quantity, 0)) AS Juni,
+                        SUM(IF(MONTH(sales.order_date) = '7', sales.quantity, 0)) AS Juli,
+                        SUM(IF(MONTH(sales.order_date) = '8', sales.quantity, 0)) AS Agustus,
+                        SUM(IF(MONTH(sales.order_date) = '9', sales.quantity, 0)) AS September,
+                        SUM(IF(MONTH(sales.order_date) = '10', sales.quantity, 0)) AS Oktober,
+                        SUM(IF(MONTH(sales.order_date) = '11', sales.quantity, 0)) AS Nopember,
+                        SUM(IF(MONTH(sales.order_date) = '12', sales.quantity, 0)) AS Desember"))
+                ->where(DB::raw('categories.id'), '=',  $c->id)
+                ->whereYear(DB::raw('sales.order_date'), '=',  $request->tahun)
+                ->whereIn(DB::raw('MONTH(sales.order_date)'), $semester)
+                ->groupBy('categories.id')
+                ->get();
+            }
+
+            $data_month_h['name'] = $c->Kategori;
+            $data_month_h['data'] = array();
+
+            foreach($data_bulan as $dm){
+                if($request->semester == ''){
+                    if(date('M') <= 6){
+                        $semester = [
+                            intval($dm->Januari),
+                            intval($dm->Februari),
+                            intval($dm->Maret),
+                            intval($dm->April),
+                            intval($dm->Mei),
+                            intval($dm->Juni),
+                        ];
+                    }else{
+                        $semester = [
+                            intval($dm->Juli),
+                            intval($dm->Agustus),
+                            intval($dm->September),
+                            intval($dm->Oktober),
+                            intval($dm->Nopember),
+                            intval($dm->Desember),
+                        ];
+                    }
+                }else{
+                    if($request->semester == '1'){
+                        $semester = [
+                            intval($dm->Januari),
+                            intval($dm->Februari),
+                            intval($dm->Maret),
+                            intval($dm->April),
+                            intval($dm->Mei),
+                            intval($dm->Juni),
+                        ];
+                    }else{
+                        $semester = [
+                            intval($dm->Juli),
+                            intval($dm->Agustus),
+                            intval($dm->September),
+                            intval($dm->Oktober),
+                            intval($dm->Nopember),
+                            intval($dm->Desember),
+                        ];
+                    }
+                }
+                $data_month_h['data'] = $semester;
+            }
+
+            array_push($array_bulan, $data_month_h);
+        }
+
+        if($request->semester == '1'){
+            $bulan = [
+                'Januari',
+                'Februari',
+                'Maret',
+                'April',
+                'Mei',
+                'Juni',
+            ];
+        }else{
+            $bulan = [
+                'Juli',
+                'Agustus',
+                'September',
+                'Oktober',
+                'Nopember',
+                'Desember',
+            ];
+        }
+
+        $response = array(
+            'kategori_barang' => $array_bulan,
+            'bulan' => $bulan
+        );
+        
+        echo json_encode($response);
+        
+    }
+    
+}
+
+
+
+
+
+
 @extends('layouts.master')
 
 @section('css')
@@ -103,6 +530,13 @@
                                         ';
                                     }
                                 @endphp
+                            </select>
+                        </div>
+                        <div class="pull-right">
+                            <select id="pilihTypeCartSaleByMonth" class="form-control">
+                                <option value="">Type Chart</option>
+                                <option value="column">Column</option>
+                                <option value="bar">Bar</option>       
                             </select>
                         </div>
                     </div>
@@ -213,13 +647,6 @@
                                 @endphp
                             </select>
                         </div>
-                        {{-- &nbsp;
-                        <div class="pull-right">
-                            <select id="pilihTypeChartTahunPurchasing" class="form-control">
-                                <option value="column">Column</option>
-                                <option value="line">Line</option>
-                            </select>
-                        </div> --}}
                     </div>
                     <div class="card-body">
                     </div>
@@ -246,8 +673,6 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-
-
 <script>
     $(document).ready(function() {
 
@@ -259,22 +684,19 @@
             var tahunNow = (tahun == '') ? today.getFullYear() : tahun;
             var semester = res[2];
             getDataSaleByMonth(tahunNow, semester);
+            
         });
 
         var options = {
             chart: {
-                renderTo: 'chartSaleByMonth',
-                type: 'column'
-            },
-            lang: {
-                drillUpText: '<< Kembali'
+                renderTo: 'chartSaleByMonth'
+                //type: 'column'
             },
             title: {},
             subtitle: {
                 text: 'ini adalah grafik laporan penjualan barang per semester.'
             },
             xAxis: {
-                type: 'category',
                 crosshair: true,
             },
             yAxis: {
@@ -292,46 +714,49 @@
                 useHTML: true
             },
             plotOptions: {
-                series: {
-                    borderWidth: 0,
-                    dataLabels: {
-                        enabled: true
-                    }
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
                 }
             },
             series: [],
-            drilldown: {
-                allowPointDrilldown: false,
-                series: []
-            }
         };
 
         function getDataSaleByMonth(tahun, semester) {
-            var today = new Date();
-            var tahun = tahun;
-            var semesterNow = (today.getMonth() <= 6) ? '1' : '2';
-            var semester = (semester == undefined) ? semesterNow : semester;
-            var year = (tahun == undefined) ? today.getFullYear() : tahun;
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: "{{ route('report.sumSaleByMonth') }}",
-                data: {
-                    'tahun': tahun,
-                    'semester': semester
-                },
-                beforeSend: function () {
-                },
-                success: function (data) {
-                    options.series = data.bulan;
-                    options.drilldown.series = data.tanggal;
-                    options.title.text = 'Laporan Penjualan Barang Semester '+ semester +' Tahun ' + year;
-                    var chart = new Highcharts.Chart(options);
-                    //console.log(chart);
-                },
-                error: function (e) {
-                    console.log(e);
-                }
+            
+            $('#pilihTypeCartSaleByMonth').on('change', function(){
+                var type = $('#pilihTypeCartSaleByMonth').val();
+            
+                console.log(type);
+                var typeSelect = type == '' ? 'column' : type;
+
+                var today = new Date();
+                var tahun = tahun;
+                var semesterNow = (today.getMonth() <= 6) ? '1' : '2';
+                var semester = (semester == undefined) ? semesterNow : semester;
+                var year = (tahun == undefined) ? today.getFullYear() : tahun;
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: "{{ route('report.sumSaleByMonth') }}",
+                    data: {
+                        'tahun': tahun,
+                        'semester': semester
+                    },
+                    beforeSend: function () {
+                    },
+                    success: function (data) {
+                        options.chart.type = typeSelect;
+                        options.series = data.kategori_barang;
+                        options.xAxis.categories = data.bulan;
+                        options.title.text = 'Laporan Penjualan Barang Semester '+ semester +' Tahun ' + year;
+                        var chart = new Highcharts.Chart(options);
+                        //console.log(chart);
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
             });
         }
         getDataSaleByMonth();
@@ -348,10 +773,7 @@
         var options = {
             chart: {
                 renderTo: 'chartSaleByYear',
-                type: 'bar',
-            },
-            lang: {
-                drillUpText: '<< Kembali'
+                type: 'column',
             },
             title: {},
             subtitle: {
@@ -424,6 +846,7 @@
 </script>
 <script>
     $(document).ready(function() {
+
         $('#pilihPurchasingByMonth').on('change', function(){
             var select = $('#pilihPurchasingByMonth').val();
             var res = select.split(" ");
@@ -433,20 +856,17 @@
             var semester = res[2];
             getDataPurchasingByMonth(tahunNow, semester);
         });
+
         var options = {
             chart: {
                 renderTo: 'chartPurchasingByMonth',
                 type: 'column'
-            },
-            lang: {
-                drillUpText: '<< Kembali'
             },
             title: {},
             subtitle: {
                 text: 'ini adalah grafik laporan pembelian barang ke supplier per semester.'
             },
             xAxis: {
-                type: 'category',
                 crosshair: true,
             },
             yAxis: {
@@ -464,19 +884,14 @@
                 useHTML: true
             },
             plotOptions: {
-                series: {
-                    borderWidth: 0,
-                    dataLabels: {
-                        enabled: true
-                    }
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
                 }
             },
             series: [],
-            drilldown: {
-                allowPointDrilldown: false,
-                series: []
-            }
         };
+
         function getDataPurchasingByMonth(tahun, semester) {
             var today = new Date();
             var tahun = tahun;
@@ -494,10 +909,11 @@
                 beforeSend: function () {
                 },
                 success: function (data) {
-                    options.series = data.bulan;
-                    options.drilldown.series = data.tanggal;
+                    options.series = data.kategori_barang;
+                    options.xAxis.categories = data.bulan;
                     options.title.text = 'Laporan Pembelian Barang Semester '+ semester +' Tahun ' + year;
                     var chart = new Highcharts.Chart(options);
+                    //console.log(chart);
                 },
                 error: function (e) {
                     console.log(e);
@@ -512,17 +928,13 @@
 
         $('#pilihTahunPurchasing').on('change', function(){
             var tahun = $('#pilihTahunPurchasing').val();
-            //var typeChart = $('#pilihtypeChartTahunPurchasing').val();
-            getDataPurchasing(tahun, typeChart);
+            getDataPurchasing(tahun);
         });
 
         var options = {
             chart: {
                 renderTo: 'chartPurchasingByYear',
-                type: 'line'
-            },
-            lang: {
-                drillUpText: '<< Kembali'
+                type: 'column',
             },
             title: {},
             subtitle: {
@@ -567,7 +979,6 @@
 
         function getDataPurchasing(tahun) {
             var tahun = tahun;
-            var typeChart = typeChart;
             var today = new Date();
             var year = (tahun == undefined) ? today.getFullYear() : tahun;
             $.ajax({
@@ -580,10 +991,6 @@
                 beforeSend: function () {
                 },
                 success: function (data) {
-                    //options.chart.type = typeChart;
-                    // options.update({
-                    //     chart: { type: typeChart }
-                    // });
                     options.series = data.kategori;
                     options.drilldown.series = data.barang;
                     options.title.text = 'Laporan Pembelian Barang Tahun ' + year;

@@ -312,7 +312,7 @@
                         $('#form_result_table').html(html);
                         //window.location='/sale';
                         $('#saleForm').trigger("reset");
-                        $("#supplier").val('').trigger("change");
+                        $("#faculty").val('').trigger("change");
                         $('#saveBtn').html('Simpan');
                         // location.reload(true);
                     }

@@ -36,7 +36,7 @@
                 </li>
                 @elseif(auth()->user()->role == 'eksekutif')
                 <li class="{{ setActive('report', 'active') }}">
-                    <a href="{{ url('report') }}"> <i class="menu-icon ti-book"></i>Laporan </a>
+                    <a href="{{ url('report') }}"> <i class="menu-icon fa fa-line-chart"></i>Grafik </a>
                 </li>
                 @endif
             </ul>

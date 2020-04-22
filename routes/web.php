@@ -2,9 +2,6 @@
 
 // auth
 Route::group(['middleware' => 'guest'], function () {
-	// Route::get('/', function () {
-	// 	return view('auth.login');
-	// })->name('login');
 	Route::get('/', 'AuthController@login')->name('login');
 	Route::post('prosesLogin', 'AuthController@prosesLogin')->name('prosesLogin');
 });
@@ -63,4 +60,6 @@ Route::group(['middleware' => ['auth','checkRole:eksekutif,admin']], function(){
 	Route::get('report/sumPurchasingTest', 'ReportController@sumPurchasingTest')->name('report.sumPurchasingTest');
 	Route::get('report/sumPurchasingByMonth', 'ReportController@sumPurchasingByMonth')->name('report.sumPurchasingByMonth');
 	Route::get('report/sumPurchasingByMonthTest', 'ReportController@sumPurchasingByMonthTest')->name('report.sumPurchasingByMonthTest');
+	Route::get('report/sumSaleByYear', 'ReportController@sumSaleByYear')->name('report.sumSaleByYear');
+	Route::get('report/sumSaleByMonth', 'ReportController@sumSaleByMonth')->name('report.sumSaleByMonth');
 });

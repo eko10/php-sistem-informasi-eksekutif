@@ -19,7 +19,6 @@ class DashboardController extends Controller
         $customerCount = $customer->count();
         $supplier = Supplier::all();
         $supplierCount = $supplier->count();
-        //dd($supplierCount);
         return view('dashboard.index', ['revenue' => $revenue, 'customer' => $customerCount, 'supplier' => $supplierCount]);
     }
 }

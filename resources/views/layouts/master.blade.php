@@ -3,12 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Dashboard | Sistem Informasi Eksekutif</title>
+    <title>{{ (Request::segment(1) != 'report') ? ucfirst(Request::segment(1)) : 'Grafik' }} | Sistem Informasi Eksekutif</title>
     <meta name="description" content="SIE - Sistem Informasi Eksekutif">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
-    <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png"> --}}
+    <link rel="shortcut icon" href="{{asset('admin/images/favicon.png')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />

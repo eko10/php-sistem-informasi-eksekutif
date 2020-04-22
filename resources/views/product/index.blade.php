@@ -285,7 +285,7 @@
                         //     html = '<div class="alert alert-danger">' + message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
                         //     $('#form_result_table').html(html);
                         // }
-                        console.log(message);
+                        //console.log(message);
                         html = '<div class="alert alert-danger"><b>Error</b>, data yang anda hapus masih terkait dengan tabel lain.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
                         $('#form_result_table').html(html);
                         $('#ok_button').removeAttr('disabled');
