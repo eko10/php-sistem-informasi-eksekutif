@@ -38,4 +38,4 @@ php artisan migrate --seed
 ```
 php artisan serve
 ```
-9.	happy coding :grin:
+11.	happy coding :grin:
